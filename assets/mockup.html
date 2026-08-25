@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabor & Churrasco - Comanda & Cardápio Digital</title>
+    <style>
+        :root {
+            --primary: #C82323;
+            --primary-dark: #9B2220;
+            --accent: #F4A21A;
+            --bg: #F8F9FA;
+            --surface: #FFFFFF;
+            --text: #1A1A1A;
+            --text-muted: #6C757D;
+            --border: #E9ECEF;
+            --success: #25D366;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding-bottom: 100px;
+        }
+
+        /* Header Sticky */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 14px 16px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .brand-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .brand-subtitle {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        /* Carrossel de Fotos Superior */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        .carousel-slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .carousel-slide.active {
+            display: block;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.85;
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 12px;
+            left: 16px;
+            right: 16px;
+            color: white;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.4);
+            padding: 6px 12px;
+            border-radius: 6px;
+            backdrop-filter: blur(2px);
+        }
+
+        /* Layout Central */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* Seções do Menu */
+        .section-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            margin: 24px 0 12px 0;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            border-left: 4px solid var(--primary);
+            padding-left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Card de Produto */
+        .item-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+            transition: transform 0.1s;
+        }
+
+        .item-card:active {
+            transform: scale(0.99);
+        }
+
+        .item-thumb {
+            width: 76px;
+            height: 76px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background-color: var(--border);
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+
+        .item-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin: 3px 0 6px 0;
+            line-height: 1.2;
+        }
+
+        .item-price {
+            font-weight: 800;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+        }
+
+        /* Controles de Quantidade */
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: var(--bg);
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .btn-qty {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background-color: var(--surface);
+            color: var(--primary);
+            font-weight: 800;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-qty:active {
+            background-color: var(--border);
+        }
+
+        .qty-val {
+            font-weight: 700;
+            font-size: 0.9rem;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* Banner Promocional do Meio da Página */
+        .promo-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: 14px;
+            padding: 16px;
+            margin: 28px 0;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            border: 2px solid var(--accent);
+            box-shadow: 0 6px 16px rgba(200, 35, 35, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .promo-img {
+            width: 85px;
+            height: 85px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+            flex-shrink: 0;
+        }
+
+        .promo-info {
+            flex: 1;
+        }
+
+        .promo-badge {
+            background-color: var(--accent);
+            color: #000;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+
+        .promo-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .promo-desc {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            margin: 4px 0 6px 0;
+        }
+
+        .promo-price {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        /* Footer Institucional */
+        footer {
+            background-color: #1A1A1A;
+            color: #EAEAEA;
+            padding: 28px 20px;
+            margin-top: 40px;
+            font-size: 0.82rem;
+            border-top: 4px solid var(--primary);
+        }
+
+        .footer-brand {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .footer-section {
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .footer-title {
+            font-weight: 700;
+            color: #FFF;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .dev-badge {
+            background-color: #2D3748;
+            color: #A0AEC0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            margin-top: 16px;
+            border: 1px solid #4A5568;
+        }
+
+        /* Barra Fixa Inferior */
+        .cart-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 30;
+            box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .cart-total-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .cart-total-val {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+
+        .btn-checkout {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-checkout:disabled {
+            background-color: var(--text-muted);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        /* Modal de Checkout */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 40;
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-content {
+            background: var(--surface);
+            width: 100%;
+            max-width: 480px;
+            border-radius: 18px 18px 0 0;
+            padding: 24px 20px;
+            animation: slideUp 0.25s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background-color: var(--bg);
+        }
+
+        .btn-send-whatsapp {
+            width: 100%;
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="brand-title">Sabor & Churrasco</div>
+        <div class="brand-subtitle">Restaurante & Churrascaria</div>
+    </header>
+
+    <!-- 1. Carrossel de Fotos no Topo -->
+    <div class="carousel-container">
+        <div class="carousel-slide active">
+            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=700&q=80"
+                alt="Churrasco no Rechaud">
+            <div class="carousel-caption">🔥 Carnes nobres preparadas diariamente na brasa</div>
+        </div>
+        <div class="carousel-slide">
+            <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=700&q=80"
+                alt="Buffet de Saladas">
+            <div class="carousel-caption">🥗 Buffet de saladas e pratos quentes variados</div>
+        </div>
+        <div class="carousel-slide">
+            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80"
+                alt="Cortes Especiais">
+            <div class="carousel-caption">🥩 Self-service com churrasco e sem balança</div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- 2. Combos Principais da Comanda -->
+        <div class="section-title">Combos de Churrasco</div>
+        <div id="combos-list"></div>
+
+        <!-- 3. Banner Promocional do Dia (Meio do Site) -->
+        <div class="promo-banner">
+            <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=300&q=80"
+                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=300&q=80';"
+                class="promo-img" alt="Prato do Dia do Chef">
+            <div class="promo-info">
+                <span class="promo-badge">Especial de Hoje</span>
+                <div class="promo-title">Prato do Dia do Chef</div>
+                <div class="promo-desc">Prato completo preparado diariamente com carnes selecionadas na brasa.</div>
+                <div class="promo-price">R$ 25,00</div>
+            </div>
+            <button class="btn-qty"
+                style="width:38px; height:38px; background:var(--accent); color:#000; border-radius:8px; font-weight:bold; font-size:1.1rem;"
+                onclick="updateQty('prato_dia', 1)">+</button>
+        </div>
+
+        <!-- 4. Cortes Individuais e Pratos Especiais -->
+        <div class="section-title">Pratos & Cortes Especiais</div>
+        <div id="specials-list"></div>
+
+        <!-- 5. Bebidas -->
+        <div class="section-title">Bebidas Geladas</div>
+        <div id="drinks-list"></div>
+
+    </div>
+
+    <!-- 6. Footer Institucional -->
+    <footer>
+        <div class="footer-brand">Sabor & Churrasco</div>
+
+        <div class="footer-section">
+            <div class="footer-title">Endereço & Localização</div>
+            Rua Benjamin Guimarães, 315 / 308 - Bairro Democrata<br>
+            Juiz de Fora - MG (Em frente ao novo Bahamas Mix)
+        </div>
+
+        <div class="footer-section">
+            <div class="footer-title">Horários de Atendimento</div>
+            • Segunda a Sábado: 10:30 às 17:30<br>
+            • Domingo: 10:30 às 15:30<br>
+            • Delivery: Todos os dias das 11:00 às 15:00
+        </div>
+
+        <div class="dev-badge">
+            🛠️ <b>Ambiente de Desenvolvimento</b><br>
+            Pedidos direcionados para o WhatsApp Dev: <b>(32) 98836-7667</b>
+        </div>
+    </footer>
+
+    <!-- Barra Fixa de Subtotal -->
+    <div class="cart-bar">
+        <div>
+            <div class="cart-total-label">Subtotal</div>
+            <div class="cart-total-val" id="cart-total">R$ 0,00</div>
+        </div>
+        <button class="btn-checkout" id="btn-checkout" disabled onclick="openModal()">
+            Avançar
+        </button>
+    </div>
+
+    <!-- Modal Checkout -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+
+            <!-- Estado 1: Form de Checkout -->
+            <div id="checkout-form-container">
+                <div class="modal-header">
+                    <h3>Finalizar Pedido</h3>
+                    <button onclick="closeModal()"
+                        style="border:none; background:none; font-size:1.3rem; cursor:pointer;">✕</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="order-type">Tipo de Pedido:</label>
+                    <select id="order-type" onchange="toggleOrderFields()">
+                        <option value="mesa">Consumo no Local (Mesa)</option>
+                        <option value="delivery">Delivery (Entrega em Casa)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="field-mesa">
+                    <label for="table-num">Número da Mesa / Identificação:</label>
+                    <input type="number" id="table-num" placeholder="Ex: 04">
+                </div>
+
+                <div class="form-group" id="field-address" style="display: none;">
+                    <label for="address">Endereço Completo de Entrega:</label>
+                    <input type="text" id="address" placeholder="Rua, número, bairro e referência">
+                </div>
+
+                <button class="btn-send-whatsapp" onclick="sendToWhatsApp()">
+                    Enviar Pedido no WhatsApp
+                </button>
+            </div>
+
+            <!-- Estado 2: Confirmação de Sucesso pós-envio -->
+            <div id="success-screen" style="display: none; text-align: center; padding: 10px 0;">
+                <div style="font-size: 3.2rem; color: #25D366; margin-bottom: 10px;">✓</div>
+                <h3 style="color: var(--primary-dark); font-size: 1.25rem; margin-bottom: 8px;">
+                    Pedido realizado com sucesso!
+                </h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px; line-height: 1.4;">
+                    Seu pedido foi direcionado para o nosso WhatsApp.
+                </p>
+                <button class="btn-checkout" style="width: 100%; background-color: var(--primary);"
+                    onclick="resetAppAndReturn()">
+                    Voltar ao cardápio
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Imagem do Chef para Fallback
+        const DEFAULT_CHEF_IMAGE = "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=300&q=80";
+
+        // 100% dos Itens Mapeados das Comandas Físicas
+        const itemsData = [
+            // Combos principais
+            { id: "churr_01", name: "Churrasco 01", desc: "Frango, porco e linguiça", price: 28.00, cat: "combo", img: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=200&q=80" },
+            { id: "churr_02", name: "Churrasco 02", desc: "Frango, porco, linguiça e boi", price: 32.00, cat: "combo", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=200&q=80" },
+            { id: "churr_03", name: "Churrasco 03", desc: "Porco e boi", price: 30.00, cat: "combo", img: "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=200&q=80" },
+            { id: "churr_04", name: "Churrasco 04", desc: "Frango e boi", price: 30.00, cat: "combo", img: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=200&q=80" },
+            { id: "churr_05", name: "Churrasco 05", desc: "Linguiça e boi", price: 30.00, cat: "combo", img: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=200&q=80" },
+
+            // Cortes individuais e especiais
+            { id: "picanha", name: "Picanha", desc: "Porção individual de picanha fatiada", price: 38.00, cat: "special", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=200&q=80" },
+            { id: "med_frango", name: "Medalhão de Frango", desc: "Espeto de medalhão com bacon", price: 26.00, cat: "special", img: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=200&q=80" },
+            { id: "somente_boi", name: "Somente Boi", desc: "Porção exclusiva de carne bovina", price: 34.00, cat: "special", img: "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=200&q=80" },
+            { id: "prato_dia", name: "Prato do Dia", desc: "Opção especial do Chef preparada diariamente na brasa", price: 25.00, cat: "special", img: DEFAULT_CHEF_IMAGE },
+
+            // Bebidas
+            { id: "refri_200", name: "Refri 200ml", desc: "Lata caçulinha gelada", price: 4.00, cat: "drink", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=200&q=80" },
+            { id: "refri_310", name: "Refri 310ml", desc: "Lata padrão", price: 6.00, cat: "drink", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=200&q=80" },
+            { id: "refri_600", name: "Refri 600ml", desc: "Garrafa individual", price: 8.00, cat: "drink", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=200&q=80" },
+            { id: "refri_1l", name: "Refri 1L", desc: "Ideal para refeição em grupo", price: 12.00, cat: "drink", img: "https://images.unsplash.com/photo-1581006852262-e4307cf6283a?auto=format&fit=crop&w=200&q=80" },
+            { id: "agua_com_gas", name: "Água com Gás", desc: "500ml", price: 4.50, cat: "drink", img: "https://images.unsplash.com/photo-1559839914-17aae19cec71?auto=format&fit=crop&w=200&q=80" },
+            { id: "agua_sem_gas", name: "Água sem Gás", desc: "500ml", price: 4.00, cat: "drink", img: "https://images.unsplash.com/photo-1559839914-17aae19cec71?auto=format&fit=crop&w=200&q=80" },
+            { id: "suco", name: "Suco Natural", desc: "Copo 400ml (Laranja/Limonada)", price: 7.00, cat: "drink", img: "https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=200&q=80" }
+        ];
+
+        let cart = {};
+
+        function renderMenu() {
+            const combosContainer = document.getElementById("combos-list");
+            const specialsContainer = document.getElementById("specials-list");
+            const drinksContainer = document.getElementById("drinks-list");
+
+            itemsData.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "item-card";
+                card.innerHTML = `
+          <img src="${item.img || DEFAULT_CHEF_IMAGE}" 
+               onerror="this.onerror=null; this.src='${DEFAULT_CHEF_IMAGE}';" 
+               class="item-thumb" 
+               alt="${item.name}">
+          <div class="item-info">
+            <div class="item-name">${item.name}</div>
+            <div class="item-desc">${item.desc}</div>
+            <div class="item-price">R$ ${item.price.toFixed(2).replace('.', ',')}</div>
+          </div>
+          <div class="qty-controls">
+            <button class="btn-qty" onclick="updateQty('${item.id}', -1)">-</button>
+            <span class="qty-val" id="qty-${item.id}">0</span>
+            <button class="btn-qty" onclick="updateQty('${item.id}', 1)">+</button>
+          </div>
+        `;
+
+                if (item.cat === "combo") combosContainer.appendChild(card);
+                else if (item.cat === "special") specialsContainer.appendChild(card);
+                else if (item.cat === "drink") drinksContainer.appendChild(card);
+            });
+        }
+
+        function updateQty(id, change) {
+            const currentQty = cart[id] || 0;
+            const newQty = Math.max(0, currentQty + change);
+
+            if (newQty === 0) delete cart[id];
+            else cart[id] = newQty;
+
+            const qtyEl = document.getElementById(`qty-${id}`);
+            if (qtyEl) qtyEl.innerText = newQty;
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            let itemCount = 0;
+            for (const [id, qty] of Object.entries(cart)) {
+                const item = itemsData.find(i => i.id === id);
+                if (item) {
+                    total += item.price * qty;
+                    itemCount += qty;
+                }
+            }
+            document.getElementById("cart-total").innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById("btn-checkout").disabled = itemCount === 0;
+        }
+
+        // Carrossel Rotativo Superior
+        let slideIndex = 0;
+        function rotateCarousel() {
+            const slides = document.querySelectorAll('.carousel-slide');
+            slides.forEach(s => s.classList.remove('active'));
+            slideIndex = (slideIndex + 1) % slides.length;
+            slides[slideIndex].classList.add('active');
+        }
+        setInterval(rotateCarousel, 3500);
+
+        // Funções do Modal
+        function openModal() { document.getElementById("modal").style.display = "flex"; }
+        function closeModal() { document.getElementById("modal").style.display = "none"; }
+
+        function toggleOrderFields() {
+            const type = document.getElementById("order-type").value;
+            document.getElementById("field-mesa").style.display = type === "mesa" ? "block" : "none";
+            document.getElementById("field-address").style.display = type === "delivery" ? "block" : "none";
+        }
+
+        // Disparo Final para o WhatsApp de Dev
+        function sendToWhatsApp() {
+            const devPhone = "5532988367667";
+            const type = document.getElementById("order-type").value;
+
+            let message = `*NOVO PEDIDO - SABOR & CHURRASCO*\n`;
+            message += `-----------------------------------\n`;
+
+            for (const [id, qty] of Object.entries(cart)) {
+                const item = itemsData.find(i => i.id === id);
+                message += `${qty}x ${item.name} - R$ ${(item.price * qty).toFixed(2)}\n`;
+            }
+
+            message += `-----------------------------------\n`;
+            message += `*Total:* ${document.getElementById("cart-total").innerText}\n`;
+
+            if (type === "mesa") {
+                const mesa = document.getElementById("table-num").value || "Não especificada";
+                message += `*Mesa/Local:* Mesa ${mesa}`;
+            } else {
+                const address = document.getElementById("address").value || "Não informado";
+                message += `*Delivery:* ${address}`;
+            }
+
+            // Transita para a tela de confirmação no modal
+            document.getElementById("checkout-form-container").style.display = "none";
+            document.getElementById("success-screen").style.display = "block";
+
+            // Abre o WhatsApp
+            window.open(`https://wa.me/${devPhone}?text=${encodeURIComponent(message)}`, "_blank");
+        }
+
+        // Reseta o estado da aplicação e retorna ao cardápio
+        function resetAppAndReturn() {
+            cart = {};
+
+            itemsData.forEach(item => {
+                const qtyEl = document.getElementById(`qty-${item.id}`);
+                if (qtyEl) qtyEl.innerText = "0";
+            });
+
+            calculateTotal();
+
+            closeModal();
+            document.getElementById("checkout-form-container").style.display = "block";
+            document.getElementById("success-screen").style.display = "none";
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        renderMenu();
+    </script>
+</body>
+
+</html>
