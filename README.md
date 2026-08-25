@@ -15,7 +15,7 @@
 ## 🛠️ Tech Stack
 
 - **Frontend:** Vue 3 (Composition API) + TypeScript + Vite
-- **Estilização:** Tailwind CSS (Design System customizado com a paleta oficial da marca)
+- **Estilização:** Tailwind CSS v4 (Design System customizado com a paleta oficial da marca)
 - **PWA Plugin:** `@vite-pwa/plugin` (Suporte offline e suporte a *Add to Home Screen*)
 - **Backend & Banco de Dados:** Supabase (PostgreSQL + Realtime Subscriptions)
 - **Integração:** WhatsApp Direct-to-Chat (`wa.me`)
@@ -38,15 +38,15 @@
 ## 📋 Plano de Ação & Roadmap de Projeto
 
 ### 🚀 Fase 1: Configuração do Ambiente e Arquitetura Base
-- [ ] **1.1. Setup do Frontend:** Inicializar o projeto Vue 3 com Vite, TypeScript e Tailwind CSS.
-- [ ] **1.2. Configuração PWA:** Adicionar manifesto, ícones e service workers para suporte à instalação em smartphones.
+- [x] **1.1. Setup do Frontend:** Inicializar o projeto Vue 3 com Vite, TypeScript e Tailwind CSS.
+- [x] **1.2. Configuração PWA:** Adicionar manifesto, ícones e service workers para suporte à instalação em smartphones.
 - [ ] **1.3. Banco de Dados (Supabase):** Criar projeto no Supabase e executar o script DDL para tabelas `products`, `categories` e `orders`.
 - [ ] **1.4. Pipeline CI/CD:** Conectar repositório GitHub à Vercel para deploys automáticos a cada commit.
 
 ---
 
 ### 🧩 Fase 2: Componentização e Gerenciamento de Estado
-- [ ] **2.1. Componentes do Layout:**
+- [x] **2.1. Componentes do Layout:**
   - `HeaderBar.vue`: Cabeçalho fixo com identidade da marca.
   - `HeroCarousel.vue`: Carrossel rotativo no topo para fotos do ambiente e produtos.
   - `PromoBanner.vue`: Destaque do "Prato do Dia / Especial do Chef" com tratamento de imagem *fallback*.
@@ -54,16 +54,16 @@
   - `CartBar.vue`: Barra flutuante inferior com exibição de subtotal em tempo real.
   - `CheckoutModal.vue`: Modal com alternância entre consumo no local (Mesa) ou Delivery.
   - `FooterBar.vue`: Rodapé institucional com informações operacionais e localização (Bairro Democrata).
-- [ ] **2.2. State Management (`useCart.ts`):**
+- [x] **2.2. State Management (`useCart.ts`):**
   - Implementar composable reativo para gestão de itens do carrinho.
   - Criar função `resetAppAndReturn()` para zerar a aplicação e retornar ao estado inicial pós-pedido.
 
 ---
 
 ### 📲 Fase 3: Integração com WhatsApp & Persistência
-- [ ] **3.1. Disparo para WhatsApp:** Estruturar gerador de links pré-formatados com os itens do pedido, subtotal e identificação (Mesa/Delivery).
+- [x] **3.1. Disparo para WhatsApp:** Estruturar gerador de links pré-formatados com os itens do pedido, subtotal e identificação (Mesa/Delivery).
 - [ ] **3.2. Persistência de Pedidos:** Gravação assíncrona do histórico de comandas na tabela `orders` do Supabase.
-- [ ] **3.3. UX de Confirmação:** Exibição da tela *"Pedido realizado com sucesso!"* e ação do botão *"Voltar ao cardápio"*.
+- [x] **3.3. UX de Confirmação:** Exibição da tela *"Pedido realizado com sucesso!"* e ação do botão *"Voltar ao cardápio"*.
 
 ---
 
@@ -117,37 +117,37 @@ CREATE TABLE orders (
 
 ---
 
-## 📂 Estrutura de Pastas Sugerida
+## 📂 Estrutura de Pastas
 
 ```text
-sabor-churrasco-pwa/
+sabor-e-churrasco/
 ├── public/
 │   ├── favicon.ico
 │   ├── icon-192.png
 │   └── icon-512.png
 ├── src/
 │   ├── assets/
-│   │   └── images/
 │   ├── components/
-│   │   ├── HeaderBar.vue
-│   │   ├── HeroCarousel.vue
-│   │   ├── PromoBanner.vue
-│   │   ├── ProductCard.vue
 │   │   ├── CartBar.vue
 │   │   ├── CheckoutModal.vue
-│   │   └── FooterBar.vue
+│   │   ├── FooterBar.vue
+│   │   ├── HeaderBar.vue
+│   │   ├── HeroCarousel.vue
+│   │   ├── ProductCard.vue
+│   │   └── PromoBanner.vue
 │   ├── composables/
-│   │   ├── useCart.ts
-│   │   └── useProducts.ts
+│   │   └── useCart.ts
 │   ├── services/
 │   │   └── supabase.ts
 │   ├── types/
 │   │   └── index.ts
 │   ├── App.vue
-│   └── main.ts
+│   ├── main.ts
+│   └── style.css
+├── .env
 ├── index.html
 ├── package.json
-├── tailwind.config.js
+├── README.md
 └── vite.config.ts
 ```
 
