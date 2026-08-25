@@ -1,6 +1,8 @@
 import { ref, computed } from 'vue'
-import { supabase } from '../services/supabase'
+import { db } from '../services/firebase'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 import type { Product, OrderType } from '../types'
+import { generateOrderCode } from '../services/orderCode'
 
 export const DEFAULT_CHEF_IMAGE = "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=300&q=80"
 
@@ -105,7 +107,6 @@ export const itemsData: Product[] = [
 ]
 
 export function useCart() {
-  // Estado local do composable
   const cart = ref<Record<string, number>>({})
   const isModalOpen = ref(false)
   const isOrderSubmitted = ref(false)
@@ -136,32 +137,41 @@ export function useCart() {
   const sendToWhatsApp = async (type: OrderType, tableNum?: string, address?: string) => {
     const devPhone = "5532988367667"
 
-    // 1. Tenta salvar no Supabase sem travar a UI caso o banco ainda não esteja conectado
+    // 1. Gera o código sequencial formatado (ex: SC0001082026)
+    let orderCode = "SC0000002026"
     try {
-      if (supabase) {
-        await supabase.from('orders').insert([{
+      orderCode = await generateOrderCode()
+    } catch (err) {
+      console.warn("Aviso ao gerar código do pedido:", err)
+    }
+
+    // 2. Grava o pedido no Firestore com o order_code
+    try {
+      if (db) {
+        await addDoc(collection(db, 'orders'), {
+          order_code: orderCode,
           type,
           table_number: type === 'mesa' ? tableNum : null,
           address: type === 'delivery' ? address : null,
           subtotal: subtotal.value,
           items: cart.value,
-          status: 'pending'
-        }])
+          status: 'pending',
+          created_at: serverTimestamp()
+        })
       }
     } catch (err) {
-      console.warn("Aviso ao tentar salvar pedido no Supabase:", err)
+      console.warn("Aviso ao salvar pedido no Firestore:", err)
     }
 
-    // 2. Monta a mensagem pré-formatada para o WhatsApp
-    let message = `*NOVO PEDIDO - SABOR & CHURRASCO*\n-----------------------------------\n`
-
+    // 3. Monta a mensagem para o WhatsApp com o Código do Pedido em destaque
+    let message = `*PEDIDO #${orderCode} - SABOR & CHURRASCO*\n`
+    message += `-----------------------------------\n`
     for (const [id, qty] of Object.entries(cart.value)) {
       const item = itemsData.find(i => i.id === id)
       if (item) {
         message += `${qty}x ${item.name} - R$ ${(item.price * qty).toFixed(2)}\n`
       }
     }
-
     message += `-----------------------------------\n`
     message += `*Total:* R$ ${subtotal.value.toFixed(2).replace('.', ',')}\n`
 
@@ -171,7 +181,6 @@ export function useCart() {
       message += `*Delivery:* ${address || 'Não informado'}`
     }
 
-    // 3. Atualiza os botões/modais e dispara a janela do WhatsApp
     isOrderSubmitted.value = true
     window.open(`https://wa.me/${devPhone}?text=${encodeURIComponent(message)}`, '_blank')
   }
