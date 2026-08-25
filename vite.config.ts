@@ -30,5 +30,9 @@ export default defineConfig({
         ]
       }
     })
-  ]
+  ],
+  base: '/restaurante-churrascaria/',
+  build: {
+    outDir: 'docs',  
+  },
 })

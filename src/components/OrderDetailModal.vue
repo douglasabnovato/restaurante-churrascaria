@@ -9,17 +9,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'close'): void
   (e: 'update-status', orderId: string, status: OrderStatus): void
-}>()
-
-const getStatusBadge = (status: OrderStatus) => {
-  switch (status) {
-    case 'pending': return { label: 'Pendente', bg: 'bg-amber-100 text-amber-800 border-amber-300' }
-    case 'preparing': return { label: 'Em Preparo', bg: 'bg-blue-100 text-blue-800 border-blue-300' }
-    case 'completed': return { label: 'Concluído', bg: 'bg-emerald-100 text-emerald-800 border-emerald-300' }
-    case 'cancelled': return { label: 'Cancelado', bg: 'bg-rose-100 text-rose-800 border-rose-300' }
-    default: return { label: status, bg: 'bg-slate-100 text-slate-800' }
-  }
-}
+}>() 
 </script>
 
 <template>
