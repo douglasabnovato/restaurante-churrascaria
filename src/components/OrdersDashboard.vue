@@ -1,3 +1,4 @@
+<!-- Lista de pedidos em tempo real com resumo e detalhes (visível só para a equipe autenticada) -->
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useOrders } from '../composables/useOrders'
@@ -7,6 +8,8 @@ import type { OrderStatus } from '../types'
 const { 
   orders, 
   loading, 
+  loadError,
+  updateError,
   selectedOrder, 
   isDetailModalOpen, 
   openOrderDetails, 
@@ -15,9 +18,11 @@ const {
 } = useOrders()
 
 // Métrica simples: Faturamento total acumulado
-const totalRevenue = computed(() => {
-  return orders.value.reduce((acc, order) => acc + (order.subtotal || 0), 0)
-})
+const totalRevenue = computed(() => orders.value
+  .filter((o) => o.status !== 'cancelled')
+  .reduce((acc, order) => acc + Math.round((order.subtotal || 0) * 100), 0) / 100)
+/* Valor em reais no padrão brasileiro */
+const brl = (v: number) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 
 const getStatusBadge = (status: OrderStatus) => {
   switch (status) {
@@ -43,15 +48,18 @@ const getStatusBadge = (status: OrderStatus) => {
       <!-- Cards Rápidos de Resumo -->
       <div class="flex gap-4">
         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex-1 md:w-44">
-          <span class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Pedidos</span>
+          <span class="block text-xs font-semibold text-slate-600 uppercase tracking-wider">Total de pedidos</span>
           <span class="text-2xl font-black text-slate-800">{{ orders.length }}</span>
         </div>
         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex-1 md:w-52">
-          <span class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Faturamento</span>
-          <span class="text-2xl font-black text-emerald-600">R$ {{ totalRevenue.toFixed(2) }}</span>
+          <span class="block text-xs font-semibold text-slate-600 uppercase tracking-wider">Faturamento (sem cancelados)</span>
+          <span class="text-2xl font-black text-emerald-700">{{ brl(totalRevenue) }}</span>
         </div>
       </div>
     </div>
+
+    <p v-if="loadError" role="alert" class="mb-4 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800">{{ loadError }}</p>
+    <p v-if="updateError" role="alert" class="mb-4 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800">{{ updateError }}</p>
 
     <!-- Indicador de Carregamento -->
     <div v-if="loading" class="text-center py-16 bg-white rounded-2xl border border-slate-200">
@@ -61,7 +69,7 @@ const getStatusBadge = (status: OrderStatus) => {
 
     <!-- Lista Vazia -->
     <div v-else-if="orders.length === 0" class="text-center py-16 bg-white rounded-2xl border border-slate-200">
-      <p class="text-slate-400 text-base font-medium">Nenhum pedido registrado até o momento.</p>
+      <p class="text-slate-600 text-base font-medium">Nenhum pedido registrado até o momento.</p>
     </div>
 
     <!-- Tabela / Lista de Pedidos -->
@@ -70,17 +78,17 @@ const getStatusBadge = (status: OrderStatus) => {
         <table class="w-full text-left text-sm">
           <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold text-xs uppercase tracking-wider">
             <tr>
-              <th class="py-3.5 px-4">Código</th>
-              <th class="py-3.5 px-4">Data / Hora</th>
-              <th class="py-3.5 px-4">Tipo / Local</th>
-              <th class="py-3.5 px-4">Valor Total</th>
-              <th class="py-3.5 px-4">Status</th>
-              <th class="py-3.5 px-4 text-right">Ação</th>
+              <th scope="col" class="py-3.5 px-4">Código</th>
+              <th scope="col" class="py-3.5 px-4">Data / Hora</th>
+              <th scope="col" class="py-3.5 px-4">Tipo / Local</th>
+              <th scope="col" class="py-3.5 px-4">Valor Total</th>
+              <th scope="col" class="py-3.5 px-4">Status</th>
+              <th scope="col" class="py-3.5 px-4 text-right">Ação</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
             <tr v-for="order in orders" :key="order.id" class="hover:bg-slate-50 transition">
-              <td class="py-4 px-4 font-mono font-bold text-amber-700">
+              <td class="py-4 px-4 font-mono font-bold text-amber-800">
                 #{{ order.order_code }}
               </td>
               <td class="py-4 px-4 text-slate-600 font-medium">
@@ -95,7 +103,7 @@ const getStatusBadge = (status: OrderStatus) => {
                 </span>
               </td>
               <td class="py-4 px-4 font-bold text-slate-900">
-                R$ {{ order.subtotal.toFixed(2) }}
+                {{ brl(order.subtotal) }}
               </td>
               <td class="py-4 px-4">
                 <span :class="['px-2.5 py-1 text-xs font-bold rounded-full border', getStatusBadge(order.status).bg]">
@@ -125,3 +133,4 @@ const getStatusBadge = (status: OrderStatus) => {
 
   </div>
 </template>
+<!-- Fim de OrdersDashboard.vue -->

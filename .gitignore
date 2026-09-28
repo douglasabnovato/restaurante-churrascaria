@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# variáveis de ambiente (o .env que estava versionado deve sair do Git: git rm --cached .env)
+.env
+.env.*
+!.env.example

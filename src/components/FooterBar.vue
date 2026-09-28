@@ -1,3 +1,4 @@
+<!-- Rodapé com endereço e horários; o aviso de WhatsApp de desenvolvimento só aparece sem VITE_WHATSAPP_NUMBER -->
 <template>
   <footer class="bg-dark text-slate-200 p-7 px-5 mt-10 text-xs border-t-4 border-primary">
     <div class="text-sm font-extrabold text-accent mb-3 uppercase">Sabor & Churrasco</div>
@@ -15,7 +16,7 @@
       • Delivery: Todos os dias das 11:00 às 15:00
     </div>
 
-    <div class="bg-slate-800 text-slate-400 p-3 rounded-md text-[0.72rem] mt-4 border border-slate-700">
+    <div v-if="IS_DEV_WHATSAPP" class="bg-slate-800 text-slate-300 p-3 rounded-md text-[0.72rem] mt-4 border border-slate-700">
       🛠️ <b>Ambiente de Desenvolvimento</b><br>
       Pedidos direcionados para o WhatsApp Dev: <b>(32) 98836-7667</b>
     </div>
@@ -23,4 +24,6 @@
 </template>
 
 <script setup lang="ts">
+import { IS_DEV_WHATSAPP } from '../config'
 </script>
+<!-- Fim de FooterBar.vue -->

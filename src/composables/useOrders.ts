@@ -1,3 +1,4 @@
+/* Pedidos em tempo real para o painel da equipe (só funciona para contas da equipe, conforme firestore.rules) */
 import { ref, onMounted, onUnmounted } from 'vue'
 import { db } from '../services/firebase'
 import { 
@@ -8,7 +9,7 @@ import {
   doc, 
   updateDoc 
 } from 'firebase/firestore'
-import { itemsData } from './useCart'
+import { itemsData } from '../data/menu'
 import type { FirestoreOrder, OrderItemDetail, OrderStatus } from '../types'
 
 export function useOrders() {
@@ -16,6 +17,8 @@ export function useOrders() {
   const loading = ref(true)
   const selectedOrder = ref<FirestoreOrder | null>(null)
   const isDetailModalOpen = ref(false)
+  const loadError = ref('')
+  const updateError = ref('')
 
   let unsubscribe: (() => void) | null = null
 
@@ -61,7 +64,7 @@ export function useOrders() {
         const data = docSnap.data()
         return {
           id: docSnap.id,
-          order_code: data.order_code || 'SC0000002026',
+          order_code: data.order_code || docSnap.id.slice(0, 8),
           type: data.type,
           table_number: data.table_number,
           address: data.address,
@@ -76,6 +79,7 @@ export function useOrders() {
       loading.value = false
     }, (error) => {
       console.error("Erro ao escutar pedidos no Firestore:", error)
+      loadError.value = error.code === 'permission-denied' ? 'Esta conta não tem acesso ao painel. Peça para incluí-la na coleção staff.' : 'Não foi possível carregar os pedidos.'
       loading.value = false
     })
   }
@@ -90,8 +94,10 @@ export function useOrders() {
           selectedOrder.value.status = newStatus
         }
       }
+      updateError.value = ''
     } catch (err) {
       console.error("Erro ao atualizar status do pedido:", err)
+      updateError.value = 'Não foi possível atualizar o status. Tente novamente.'
     }
   }
 
@@ -118,6 +124,8 @@ export function useOrders() {
   return {
     orders,
     loading,
+    loadError,
+    updateError,
     selectedOrder,
     isDetailModalOpen,
     openOrderDetails,
@@ -125,3 +133,4 @@ export function useOrders() {
     updateOrderStatus
   }
 }
+/* Fim de useOrders.ts */

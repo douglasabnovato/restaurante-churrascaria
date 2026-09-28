@@ -8,8 +8,14 @@
 
 - **Cliente/BU:** Sabor & Churrasco Restaurante (Juiz de Fora - MG)
 - **Objetivo:** Eliminar erros de cálculo manual, otimizar o fluxo de atendimento em mesas e delivery e oferecer um painel de controle (Dashboard) em tempo real para a cozinha/atendimento.
-- **Ambiente de Dev (WhatsApp):** `+55 (32) 98836-7667`
+- **Ambiente de Dev (WhatsApp):** `+55 (32) 98836-7667` (padrão quando `VITE_WHATSAPP_NUMBER` não está definido)
 - **URL de Produção:** [GitHub Pages - Sabor & Churrasco](https://douglasabnovato.github.io/restaurante-churrascaria/)
+
+### 🌐 Em produção
+
+- URL: https://douglasabnovato.github.io/restaurante-churrascaria/ (painel da equipe em `#/painel`, com login)
+- Hospedagem: GitHub Pages publicado pelo GitHub Actions a cada push na `main` (variáveis `VITE_*` nas Variables do repositório) + Firebase (Auth e Firestore, plano Spark)
+- Passo a passo, incluindo a publicação das regras do Firestore: [documentacao/DEPLOY.md](documentacao/DEPLOY.md)
 
 ---
 
@@ -56,7 +62,7 @@ Abaixo estão alguns prints que ilustram o funcionamento do Sabor & Churrasco, c
 - **PWA Plugin:** `@vite-pwa/plugin` (Suporte offline e *Add to Home Screen*)
 - **Backend & Banco de Dados:** Google Cloud Firestore (Serverless com sincronização em tempo real via `onSnapshot`)
 - **Integração:** WhatsApp Direct-to-Chat (`wa.me`) com códigos de pedido formatados (`SCXXXXMMAAAA`)
-- **Hospedagem / CI/CD:** GitHub Pages (via diretório `/docs`)
+- **Hospedagem / CI/CD:** GitHub Pages publicado pelo GitHub Actions (build em `dist/`, fora do Git)
 
 ---
 
@@ -104,6 +110,24 @@ Abaixo estão alguns prints que ilustram o funcionamento do Sabor & Churrasco, c
 
 ---
 
+### 🔒 Fase 5: Segurança, acessibilidade e testes (v1.1)
+- [x] Painel movido para `#/painel` e protegido por login da equipe (Firebase Auth, e-mail e senha)
+- [x] `firestore.rules` versionado: clientes só **criam** pedidos válidos; ler pedidos/endereços e mudar status é só da equipe (coleção `staff`)
+- [x] Número do WhatsApp por `VITE_WHATSAPP_NUMBER`; `.env` fora do Git (use `.env.example`)
+- [x] Validação de mesa/endereço, totais em centavos, código provisório único quando o contador falha
+- [x] WCAG AA (axe-core sem violações, Lighthouse Acessibilidade 100); carrossel com pausa
+- [x] Firebase carregado só ao enviar o pedido ou abrir o painel: JS inicial de 576 kB para 87 kB
+- [x] Testes: `npm test` (regras do pedido) e `npm run test:rules` (regras do Firestore no emulador)
+
+#### Como configurar o painel
+
+1. No console do Firebase: **Authentication → Método de login → E-mail/senha** (ativar) e crie o usuário da equipe.
+2. **Firestore → Dados**: crie a coleção `staff` com um documento cujo ID é o **UID** desse usuário (conteúdo livre, ex.: `{ "nome": "Caixa" }`).
+3. Publique as regras: `npm run deploy:rules` (ou cole `firestore.rules` no console).
+4. Acesse `.../restaurante-churrascaria/#/painel` e entre com o e-mail e a senha.
+
+Detalhes em [documentacao/ANALISE.md](documentacao/ANALISE.md), [documentacao/ARQUITETURA.md](documentacao/ARQUITETURA.md) e [documentacao/PLANO-DE-ACAO.md](documentacao/PLANO-DE-ACAO.md).
+
 ## 🗄️ Estrutura do Banco de Dados (Cloud Firestore)
 
 O sistema utiliza arquitetura NoSQL baseada em documentos e coleções:
@@ -138,7 +162,7 @@ Firestore Database (default)
 sabor-e-churrasco/
 ├── .github/                     [Prints e documentação visual para o README]
 ├── public/                      [Favicon e manifestos PWA]
-├── docs/                        [Build estático gerado para produção no GitHub Pages]
+├── documentacao/                [Análise, arquitetura, plano de ação e DEPLOY.md]
 ├── src/
 │   ├── components/              [Componentes visuais e modais]
 │   │   ├── CartBar.vue
@@ -161,7 +185,7 @@ sabor-e-churrasco/
 │   ├── App.vue
 │   ├── main.ts
 │   └── style.css
-├── .env                         [Variáveis de ambiente do Firebase]
+├── .env.example                 [Modelo das variáveis; o .env fica fora do Git]
 ├── index.html
 ├── package.json
 ├── README.md

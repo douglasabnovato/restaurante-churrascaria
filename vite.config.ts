@@ -1,3 +1,5 @@
+/* Build com Vite + PWA para o GitHub Pages (pasta dist/, publicada pelo GitHub Actions); ícones do manifesto apontam para o SVG que existe em public/ */
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
@@ -16,16 +18,13 @@ export default defineConfig({
         theme_color: '#C82323',
         background_color: '#F8F9FA',
         display: 'standalone',
+        lang: 'pt-BR',
         icons: [
           {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
+            src: 'favicon.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'any'
           }
         ]
       }
@@ -33,6 +32,8 @@ export default defineConfig({
   ],
   base: '/restaurante-churrascaria/',
   build: {
-    outDir: 'docs',  
+    outDir: 'dist',
   },
+  test: { include: ['tests/unit/**/*.test.ts'] },
 })
+/* Fim de vite.config.ts */

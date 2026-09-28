@@ -1,3 +1,4 @@
+<!-- Detalhes do pedido e troca de status (equipe) -->
 <script setup lang="ts">
 import type { FirestoreOrder, OrderStatus } from '../types'
 
@@ -22,7 +23,7 @@ const emit = defineEmits<{
           <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Comanda do Pedido</span>
           <h2 class="text-xl font-bold font-mono text-amber-400">#{{ order.order_code }}</h2>
         </div>
-        <button @click="emit('close')" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition">
+        <button type="button" aria-label="Fechar" @click="emit('close')" class="text-slate-300 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition">
           ✕
         </button>
       </div>
@@ -102,3 +103,4 @@ const emit = defineEmits<{
     </div>
   </div>
 </template>
+<!-- Fim de OrderDetailModal.vue -->

@@ -1,5 +1,6 @@
+<!-- Cardápio para clientes e, em #/painel, o painel da equipe (antes o painel ficava em uma aba aberta a qualquer cliente) -->
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 import HeaderBar from './components/HeaderBar.vue'
 import HeroCarousel from './components/HeroCarousel.vue'
 import PromoBanner from './components/PromoBanner.vue'
@@ -7,11 +8,15 @@ import ProductCard from './components/ProductCard.vue'
 import CartBar from './components/CartBar.vue'
 import CheckoutModal from './components/CheckoutModal.vue'
 import FooterBar from './components/FooterBar.vue'
-import OrdersDashboard from './components/OrdersDashboard.vue'
+const StaffPanel = defineAsyncComponent(() => import('./components/StaffPanel.vue'))
 
 import { useCart, itemsData } from './composables/useCart'
 
-const currentTab = ref<'menu' | 'dashboard'>('menu')
+const currentTab = ref<'menu' | 'dashboard'>(location.hash === '#/painel' ? 'dashboard' : 'menu')
+/* Sincroniza a visão com o endereço (#/painel) */
+const syncRoute = () => { currentTab.value = location.hash === '#/painel' ? 'dashboard' : 'menu' }
+onMounted(() => window.addEventListener('hashchange', syncRoute))
+onUnmounted(() => window.removeEventListener('hashchange', syncRoute))
 
 const { 
   cart, 
@@ -19,6 +24,8 @@ const {
   totalItems, 
   isModalOpen, 
   isOrderSubmitted, 
+  sending,
+  lastCode,
   updateQty, 
   sendToWhatsApp, 
   resetAppAndReturn 
@@ -33,35 +40,16 @@ const drinks = computed(() => itemsData.filter(i => i.cat === 'drink'))
   <div class="min-h-screen bg-body pb-24 flex flex-col justify-between">
     
     <div>
-      <!-- Cabeçalho de Navegação entre Visões (Cardápio x Dashboard) -->
-      <div class="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
-        <div class="max-w-[480px] mx-auto px-4 py-2.5 flex justify-between items-center">
-          <span class="text-xs font-bold text-amber-400 tracking-wide uppercase">Gestão Sabor & Churrasco</span>
-          <nav class="flex gap-1.5">
-            <button 
-              @click="currentTab = 'menu'"
-              :class="['px-3 py-1.5 text-xs font-bold rounded-lg transition', currentTab === 'menu' ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-300 hover:bg-slate-700']">
-              📋 Cardápio
-            </button>
-            <button 
-              @click="currentTab = 'dashboard'"
-              :class="['px-3 py-1.5 text-xs font-bold rounded-lg transition', currentTab === 'dashboard' ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 text-slate-300 hover:bg-slate-700']">
-              📊 Dashboard
-            </button>
-          </nav>
-        </div>
-      </div>
-
       <!-- VISUALIZAÇÃO 1: CARDÁPIO ORIGINAL -->
       <div v-if="currentTab === 'menu'">
         <HeaderBar />
         <HeroCarousel />
 
-        <main class="max-w-[480px] mx-auto p-4">
+        <main id="conteudo" class="max-w-[480px] mx-auto p-4">
           <!-- Combos Principais -->
-          <div class="text-sm font-extrabold my-5 text-primary-dark uppercase border-l-4 border-primary pl-2.5">
+          <h2 class="text-sm font-extrabold my-5 text-primary-dark uppercase border-l-4 border-primary pl-2.5">
             Combos de Churrasco
-          </div>
+          </h2>
           <ProductCard 
             v-for="item in combos" 
             :key="item.id" 
@@ -74,9 +62,9 @@ const drinks = computed(() => itemsData.filter(i => i.cat === 'drink'))
           <PromoBanner @add="updateQty('prato_dia', 1)" />
 
           <!-- Cortes Especiais e Prato do Dia -->
-          <div class="text-sm font-extrabold my-5 text-primary-dark uppercase border-l-4 border-primary pl-2.5">
+          <h2 class="text-sm font-extrabold my-5 text-primary-dark uppercase border-l-4 border-primary pl-2.5">
             Pratos & Cortes Especiais
-          </div>
+          </h2>
           <ProductCard 
             v-for="item in specials" 
             :key="item.id" 
@@ -86,9 +74,9 @@ const drinks = computed(() => itemsData.filter(i => i.cat === 'drink'))
           />
 
           <!-- Bebidas -->
-          <div class="text-sm font-extrabold my-5 text-primary-dark uppercase border-l-4 border-primary pl-2.5">
+          <h2 class="text-sm font-extrabold my-5 text-primary-dark uppercase border-l-4 border-primary pl-2.5">
             Bebidas Geladas
-          </div>
+          </h2>
           <ProductCard 
             v-for="item in drinks" 
             :key="item.id" 
@@ -109,6 +97,8 @@ const drinks = computed(() => itemsData.filter(i => i.cat === 'drink'))
         <CheckoutModal 
           :is-open="isModalOpen"
           :is-submitted="isOrderSubmitted"
+          :sending="sending"
+          :order-code="lastCode"
           @close="isModalOpen = false"
           @send="sendToWhatsApp"
           @reset="resetAppAndReturn"
@@ -117,7 +107,7 @@ const drinks = computed(() => itemsData.filter(i => i.cat === 'drink'))
 
       <!-- VISUALIZAÇÃO 2: DASHBOARD DE PEDIDOS -->
       <div v-else-if="currentTab === 'dashboard'">
-        <OrdersDashboard />
+        <StaffPanel />
       </div>
 
     </div>
@@ -126,3 +116,4 @@ const drinks = computed(() => itemsData.filter(i => i.cat === 'drink'))
 
   </div>
 </template>
+<!-- Fim de App.vue -->

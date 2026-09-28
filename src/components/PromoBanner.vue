@@ -1,3 +1,4 @@
+<!-- Banner do prato do dia com botão para adicionar ao pedido -->
 <template>
   <div class="bg-gradient-to-br from-primary to-primary-dark text-white rounded-xl p-4 my-7 flex gap-3 items-center border-2 border-accent shadow-lg relative overflow-hidden">
     <img 
@@ -10,11 +11,13 @@
       <span class="bg-accent text-dark text-[0.65rem] font-extrabold px-2 py-0.5 rounded uppercase inline-block mb-1">
         Especial de Hoje
       </span>
-      <div class="text-base font-extrabold leading-tight">Prato do Dia do Chef</div>
+      <h2 class="text-base font-extrabold leading-tight">Prato do Dia do Chef</h2>
       <div class="text-xs opacity-90 my-1">Prato completo preparado diariamente com carnes selecionadas na brasa.</div>
-      <div class="text-lg font-extrabold text-accent">R$ 25,00</div>
+      <div class="text-lg font-extrabold text-white">R$ 25,00</div>
     </div>
     <button 
+      type="button"
+      aria-label="Adicionar 1 Prato do Dia do Chef"
       @click="$emit('add')" 
       class="w-[38px] h-[38px] bg-accent text-dark rounded-lg font-extrabold text-lg flex items-center justify-center shrink-0 active:scale-95 transition-transform cursor-pointer shadow"
     >
@@ -35,3 +38,4 @@ const handleImageError = () => {
   imgSrc.value = DEFAULT_CHEF_IMAGE
 }
 </script>
+<!-- Fim de PromoBanner.vue -->
