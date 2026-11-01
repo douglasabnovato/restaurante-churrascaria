@@ -4,6 +4,27 @@
 
 ---
 
+## ✅ Próximos passos do responsável
+
+As regras do Firestore já estão publicadas (01/11/2026). Falta publicar a versão atual do site, com o painel protegido por login.
+
+1. Abrir [Settings → Secrets and variables → Actions → Variables](https://github.com/douglasabnovato/restaurante-churrascaria/settings/variables/actions).
+2. Abrir o `.env` local, com `notepad .env`, para copiar os valores.
+3. Em **New repository variable**, criar cada variável abaixo com o valor que vem depois do `=`, sem aspas:
+   - `VITE_FIREBASE_API_KEY`
+   - `VITE_FIREBASE_AUTH_DOMAIN`
+   - `VITE_FIREBASE_PROJECT_ID`
+   - `VITE_FIREBASE_STORAGE_BUCKET`
+   - `VITE_FIREBASE_MESSAGING_SENDER_ID`
+   - `VITE_FIREBASE_APP_ID`
+   - `VITE_FIREBASE_MEASUREMENT_ID`
+4. Criar `VITE_WHATSAPP_NUMBER` com o número real, só dígitos, com DDI e DDD. Sem ela, o site usa o WhatsApp de desenvolvimento e mostra um aviso no rodapé.
+5. Em [Settings → Pages](https://github.com/douglasabnovato/restaurante-churrascaria/settings/pages), trocar **Source** para **GitHub Actions**.
+
+Depois disso, mesclar o [PR #1](https://github.com/douglasabnovato/restaurante-churrascaria/pull/1) e conferir que o painel pede login. Antes do `git pull`, guardar uma cópia do `.env`, porque esse merge o apaga do clone local. Detalhes em [documentacao/DEPLOY.md](documentacao/DEPLOY.md).
+
+---
+
 ## 📌 Visão Geral do Produto
 
 - **Cliente/BU:** Sabor & Churrasco Restaurante (Juiz de Fora - MG)
