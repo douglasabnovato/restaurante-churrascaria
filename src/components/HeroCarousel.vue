@@ -3,7 +3,7 @@
   <section class="relative w-full h-[200px] overflow-hidden bg-black" aria-roledescription="carrossel" aria-label="Destaques da casa">
     <div v-for="(slide, index) in slides" :key="index" class="absolute inset-0 transition-opacity duration-700 ease-in-out"
       :class="currentSlide === index ? 'opacity-100 z-10' : 'opacity-0 z-0'" :aria-hidden="currentSlide !== index">
-      <img :src="slide.image" alt="" class="w-full h-full object-cover opacity-85" :loading="index === 0 ? 'eager' : 'lazy'" :fetchpriority="index === 0 ? 'high' : 'low'" width="480" height="200" width="700" height="200" />
+      <img :src="slide.image" alt="" class="w-full h-full object-cover opacity-85" :loading="index === 0 ? 'eager' : 'lazy'" :fetchpriority="index === 0 ? 'high' : 'low'" width="700" height="200" />
       <p class="absolute bottom-3 left-4 right-14 text-white font-bold text-sm bg-black/60 px-3 py-1.5 rounded-md">{{ slide.caption }}</p>
     </div>
     <button type="button" class="absolute z-20 bottom-3 right-3 w-9 h-9 rounded-full bg-black/60 text-white" :aria-label="playing ? 'Pausar destaques' : 'Continuar destaques'" @click="toggle">
