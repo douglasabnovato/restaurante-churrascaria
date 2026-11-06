@@ -1,6 +1,6 @@
 /* Testes das regras do pedido: total em centavos, validação, mensagem e código provisório */
 import { describe, it, expect } from 'vitest'
-import { brl, buildMessage, cartTotal, fallbackOrderCode, validateCheckout } from '../../src/domain/order'
+import { NOTE_MAX, brl, buildMessage, cartTotal, cleanNote, fallbackOrderCode, validateCheckout } from '../../src/domain/order'
 import type { Product } from '../../src/types'
 
 const menu: Product[] = [
@@ -27,6 +27,17 @@ describe('pedido', () => {
     expect(msg).toContain('2x Suco - R$')
     expect(msg).toContain(`*Total:* ${brl(38.2)}`)
     expect(msg.endsWith('*Delivery:* Rua A, 10 - Centro')).toBe(true)
+  })
+  it('observação vai no fim da mensagem, em uma linha', () => {
+    const msg = buildMessage('SC1', { a: 1 }, menu, 'mesa', '4', '', '  picanha ao ponto\n sem cebola ')
+    expect(msg.endsWith('*Mesa:* 4\n*Observação:* picanha ao ponto sem cebola')).toBe(true)
+  })
+  it('sem observação, a mensagem não muda', () => {
+    expect(buildMessage('SC1', { a: 1 }, menu, 'mesa', '4', '', '   ')).not.toContain('Observação')
+    expect(buildMessage('SC1', { a: 1 }, menu, 'mesa', '4', '')).not.toContain('Observação')
+  })
+  it('observação é cortada no limite', () => {
+    expect(cleanNote('x'.repeat(NOTE_MAX + 50))).toHaveLength(NOTE_MAX)
   })
   it('código provisório não é mais fixo', () => {
     expect(fallbackOrderCode(new Date(2026, 8, 27, 12, 0, 1))).toMatch(/^SC\d{4}092026$/)
