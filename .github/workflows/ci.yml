@@ -6,6 +6,7 @@ on:
     branches: [main, 'developer/**']
   pull_request:
     branches: [main, 'developer/**']
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
@@ -31,11 +32,11 @@ jobs:
           VITE_FIREBASE_MEASUREMENT_ID: ${{ vars.VITE_FIREBASE_MEASUREMENT_ID }}
           VITE_WHATSAPP_NUMBER: ${{ vars.VITE_WHATSAPP_NUMBER }}
       - uses: actions/upload-pages-artifact@v3
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && vars.PAGES_VIA_ACTIONS == 'true'
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.PAGES_VIA_ACTIONS == 'true'
         with: { path: dist }
   deploy:
     needs: web
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && vars.PAGES_VIA_ACTIONS == 'true'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.PAGES_VIA_ACTIONS == 'true'
     runs-on: ubuntu-latest
     permissions:
       pages: write

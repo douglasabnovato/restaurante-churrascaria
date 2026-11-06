@@ -4,6 +4,33 @@
 
 ---
 
+## Estado e próximos passos (ciclo de 03/11/2026)
+
+**O que foi feito**
+- CI na `main` e nos PRs para `developer/**`: testes, regras do Firestore no emulador e build ([#10](https://github.com/douglasabnovato/restaurante-churrascaria/pull/10), que traz o [#1](https://github.com/douglasabnovato/restaurante-churrascaria/pull/1)).
+- `.env` fora do versionamento; a configuração vem das Variables do repositório (#1).
+- Primeira imagem do carrossel menor e priorizada: LCP do build local de 4,22 s para 2,53 s (#1).
+- Deploy pelo Actions travado até a variável `PAGES_VIA_ACTIONS=true`, para a `main` não ficar vermelha antes da troca do Pages (#10).
+- Observação opcional no pedido (ex.: ponto da carne), enviada no WhatsApp, com testes (#10).
+- Regras do Firestore publicadas em 01/11/2026: leitura sem login é recusada.
+
+**O que queremos fazer**
+- [#2](https://github.com/douglasabnovato/restaurante-churrascaria/issues/2) Publicar a versão atual do site (responsável).
+- [#11](https://github.com/douglasabnovato/restaurante-churrascaria/issues/11) Proteger a `main` com PR e CI obrigatórios (responsável).
+- [#12](https://github.com/douglasabnovato/restaurante-churrascaria/issues/12) Medir o uso do cardápio com aviso de coleta (responsável).
+- [#16](https://github.com/douglasabnovato/restaurante-churrascaria/issues/16) Confirmar a meta da hipótese (responsável).
+- [#9](https://github.com/douglasabnovato/restaurante-churrascaria/issues/9) Reduzir o LCP móvel do cardápio.
+- [#13](https://github.com/douglasabnovato/restaurante-churrascaria/issues/13) Mostrar a observação do pedido no painel.
+- [#14](https://github.com/douglasabnovato/restaurante-churrascaria/issues/14) Avisar quando o delivery está fora do horário.
+- [#15](https://github.com/douglasabnovato/restaurante-churrascaria/issues/15) Ícones PNG de 192 e 512 px no PWA.
+
+**Onde está a documentação**
+- Estado e critérios: [documentacao/MVP.md](documentacao/MVP.md).
+- Plano do ciclo: [documentacao/PLANO-DE-ACAO.md](documentacao/PLANO-DE-ACAO.md), seção "Ciclo de 03/11/2026".
+- Publicação: [documentacao/DEPLOY.md](documentacao/DEPLOY.md).
+
+---
+
 ## ✅ Próximos passos do responsável
 
 As regras do Firestore já estão publicadas (01/11/2026). Falta publicar a versão atual do site, com o painel protegido por login.
@@ -20,8 +47,9 @@ As regras do Firestore já estão publicadas (01/11/2026). Falta publicar a vers
    - `VITE_FIREBASE_MEASUREMENT_ID`
 4. Criar `VITE_WHATSAPP_NUMBER` com o número real, só dígitos, com DDI e DDD. Sem ela, o site usa o WhatsApp de desenvolvimento e mostra um aviso no rodapé.
 5. Em [Settings → Pages](https://github.com/douglasabnovato/restaurante-churrascaria/settings/pages), trocar **Source** para **GitHub Actions**.
+6. Criar a variável `PAGES_VIA_ACTIONS` com o valor `true`.
 
-Depois disso, mesclar o [PR #1](https://github.com/douglasabnovato/restaurante-churrascaria/pull/1) e conferir que o painel pede login. Antes do `git pull`, guardar uma cópia do `.env`, porque esse merge o apaga do clone local. Detalhes em [documentacao/DEPLOY.md](documentacao/DEPLOY.md).
+Depois disso, rodar o workflow CI na `main` (Actions → CI → Run workflow) e conferir que o painel pede login. O PR #1 já foi integrado: antes do `git pull` no clone local, guardar uma cópia do `.env`, porque o merge o apaga da pasta. Detalhes em [documentacao/DEPLOY.md](documentacao/DEPLOY.md).
 
 ---
 
@@ -34,8 +62,8 @@ Depois disso, mesclar o [PR #1](https://github.com/douglasabnovato/restaurante-c
 
 ### 🌐 Em produção
 
-- URL: https://douglasabnovato.github.io/restaurante-churrascaria/ (painel da equipe em `#/painel`, com login)
-- Hospedagem: GitHub Pages publicado pelo GitHub Actions a cada push na `main` (variáveis `VITE_*` nas Variables do repositório) + Firebase (Auth e Firestore, plano Spark)
+- URL: https://douglasabnovato.github.io/restaurante-churrascaria/ (responde com HTTP 200 em 06/11/2026). **Atenção:** o que está no ar ainda é o build antigo da pasta `docs/`, sem o painel com login. A versão atual entra no ar quando o Pages passar a publicar pelo Actions ([#2](https://github.com/douglasabnovato/restaurante-churrascaria/issues/2)).
+- Hospedagem prevista: GitHub Pages publicado pelo GitHub Actions a cada push na `main` (variáveis `VITE_*` e `PAGES_VIA_ACTIONS=true` nas Variables do repositório) + Firebase (Auth e Firestore, plano Spark). As regras do Firestore já estão publicadas.
 - Passo a passo, incluindo a publicação das regras do Firestore: [documentacao/DEPLOY.md](documentacao/DEPLOY.md)
 
 ---
@@ -105,7 +133,7 @@ Abaixo estão alguns prints que ilustram o funcionamento do Sabor & Churrasco, c
 - [x] **1.1. Setup do Frontend:** Inicializar o projeto Vue 3 com Vite, TypeScript e Tailwind CSS.
 - [x] **1.2. Configuração PWA:** Adicionar manifesto, ícones e service workers para suporte à instalação em smartphones.
 - [x] **1.3. Banco de Dados (Firebase Firestore):** Configuração do projeto e inicialização dos serviços cloud.
-- [x] **1.4. Pipeline CI/CD:** Configuração de build automatizado voltado para a pasta `/docs` do GitHub Pages.
+- [x] **1.4. Pipeline CI/CD:** Build automatizado no GitHub Actions; a publicação pelo Actions liga com `PAGES_VIA_ACTIONS=true` (até lá, o Pages serve a pasta `/docs`, com o build antigo).
 
 ---
 
