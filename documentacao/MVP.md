@@ -27,7 +27,7 @@
 
 **Nível:** Vitrine (N2), 12 critérios.
 
-**Resultado:** 4 de 12 critérios atendidos por inteiro (1, 6, 11 e 12), 6 parciais e 2 não atendidos (5 e 7). Antes deste ciclo, a tabela tinha 2 (o resumo dizia 1). É um julgamento técnico.
+**Resultado:** 4 de 12 critérios atendidos por inteiro (1, 6, 11 e 12), 5 parciais, 1 não confirmado (3) e 2 não atendidos (5 e 7). Antes deste ciclo, a tabela tinha 2 (o resumo dizia 1). É um julgamento técnico.
 
 **Finalizado: não.** Falta, do lado do código, o LCP no site publicado (#9). Dependem do responsável, cada um com issue `depende-do-responsavel`: publicar a versão atual (#2), proteger a `main` (#11), medir o uso (#12) e confirmar a meta (#16).
 
