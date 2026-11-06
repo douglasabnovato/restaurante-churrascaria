@@ -25,7 +25,7 @@ export function useCart() {
   const totalItems = computed(() => Object.values(cart.value).reduce((acc, qty) => acc + qty, 0))
 
   /* Gera o código, registra o pedido e abre o WhatsApp (o registro não bloqueia o envio) */
-  const sendToWhatsApp = async (type: OrderType, tableNum = "", address = "") => {
+  const sendToWhatsApp = async (type: OrderType, tableNum = "", address = "", note = "") => {
     if (sending.value) return
     sending.value = true
     const whatsappWindow = window.open("", "_blank")
@@ -41,7 +41,7 @@ export function useCart() {
     } catch (err) {
       console.warn("Pedido não registrado no painel; seguirá só pelo WhatsApp.", err)
     }
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildMessage(orderCode, cart.value, itemsData, type, tableNum, address))}`
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildMessage(orderCode, cart.value, itemsData, type, tableNum, address, note))}`
     if (whatsappWindow) whatsappWindow.location.href = url
     else window.location.href = url
     lastCode.value = orderCode

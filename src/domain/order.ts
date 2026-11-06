@@ -28,7 +28,15 @@ export function validateCheckout(type: OrderType, table: string, address: string
 }
 
 /* Texto do pedido enviado ao WhatsApp */
-export function buildMessage(code: string, cart: Cart, menu: Product[], type: OrderType, table: string, address: string): string {
+/* Limite da observação do pedido (ex.: ponto da carne) */
+export const NOTE_MAX = 140
+
+/* Observação em uma linha, sem espaços sobrando e cortada no limite */
+export function cleanNote(note = ""): string {
+  return note.replace(/\s+/g, " ").trim().slice(0, NOTE_MAX)
+}
+
+export function buildMessage(code: string, cart: Cart, menu: Product[], type: OrderType, table: string, address: string, note = ""): string {
   const lines = [`*PEDIDO #${code} - SABOR & CHURRASCO*`, "-----------------------------------"]
   for (const [id, qty] of Object.entries(cart)) {
     const item = menu.find((i) => i.id === id)
@@ -36,6 +44,8 @@ export function buildMessage(code: string, cart: Cart, menu: Product[], type: Or
   }
   lines.push("-----------------------------------", `*Total:* ${brl(cartTotal(cart, menu))}`)
   lines.push(type === "mesa" ? `*Mesa:* ${table}` : `*Delivery:* ${address.trim()}`)
+  const obs = cleanNote(note)
+  if (obs) lines.push(`*Observação:* ${obs}`)
   return lines.join("\n")
 }
 

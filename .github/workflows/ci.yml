@@ -1,8 +1,14 @@
 # CI: testes, regras do Firestore no emulador e build; na main, publica o dist/ no GitHub Pages
+# só quando a variável PAGES_VIA_ACTIONS for "true" (depois de trocar a fonte do Pages para GitHub Actions)
 name: CI
 on:
   push:
+    branches: [main, 'developer/**']
   pull_request:
+    branches: [main, 'developer/**']
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   web:
     runs-on: ubuntu-latest
@@ -26,11 +32,11 @@ jobs:
           VITE_FIREBASE_MEASUREMENT_ID: ${{ vars.VITE_FIREBASE_MEASUREMENT_ID }}
           VITE_WHATSAPP_NUMBER: ${{ vars.VITE_WHATSAPP_NUMBER }}
       - uses: actions/upload-pages-artifact@v3
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.PAGES_VIA_ACTIONS == 'true'
         with: { path: dist }
   deploy:
     needs: web
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.PAGES_VIA_ACTIONS == 'true'
     runs-on: ubuntu-latest
     permissions:
       pages: write
