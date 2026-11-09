@@ -8,7 +8,7 @@
 
 **Finalizado:** não
 
-Do lado do código, faltam o envio do pedido por teclado (critério 8, #19) e o LCP no site publicado (critério 7, #9), que só pode ser medido depois da publicação. Dependem do responsável, cada um com issue `depende-do-responsavel`: publicar a versão atual (#2), proteger a `main` (#11), medir o uso (#12) e confirmar a meta (#16).
+Do lado do código, faltam o envio do pedido por teclado (critério 8, #19) e o LCP no site publicado (critério 7, #9), que só pode ser medido depois da publicação. Dependem do responsável, cada um com issue `depende-do-responsavel`: mesclar o ciclo de 07/11 (#21, o merge do agente foi negado pela permissão), publicar a versão atual (#2), proteger a `main` (#11), medir o uso (#12) e confirmar a meta (#16).
 
 ## Problema e hipótese
 
@@ -71,7 +71,7 @@ Pagamento online, integração com caixa e novos recursos antes de resolver a ex
 
 **Resultado:** 4 de 12 critérios atendidos por inteiro (1, 6, 11 e 12), 5 parciais, 1 não confirmado (3) e 2 não atendidos (5 e 7). Antes deste ciclo, a tabela tinha 2 (o resumo dizia 1). É um julgamento técnico.
 
-**Finalizado: não.** Falta, do lado do código, o LCP no site publicado (#9). Dependem do responsável, cada um com issue `depende-do-responsavel`: publicar a versão atual (#2), proteger a `main` (#11), medir o uso (#12) e confirmar a meta (#16).
+**Finalizado: não.** Falta, do lado do código, o LCP no site publicado (#9). Dependem do responsável, cada um com issue `depende-do-responsavel`: mesclar o ciclo de 07/11 (#21, o merge do agente foi negado pela permissão), publicar a versão atual (#2), proteger a `main` (#11), medir o uso (#12) e confirmar a meta (#16).
 
 ### Medições de 02/11/2026
 

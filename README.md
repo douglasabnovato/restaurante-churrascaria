@@ -16,6 +16,7 @@ Nível: Vitrine (N2). **4 de 12** critérios do MVP atendidos; não finalizado. 
 **Ciclo de 03/11/2026:** CI nos PRs, `.env` fora do Git, carrossel mais leve, trava do deploy e observação no pedido (#10, #1).
 
 **O que queremos fazer**
+- [#21](https://github.com/douglasabnovato/restaurante-churrascaria/issues/21) Mesclar o ciclo de 07/11 (responsável).
 - [#2](https://github.com/douglasabnovato/restaurante-churrascaria/issues/2) Publicar a versão atual do site (responsável).
 - [#11](https://github.com/douglasabnovato/restaurante-churrascaria/issues/11) Proteger a `main` com PR e CI obrigatórios (responsável).
 - [#12](https://github.com/douglasabnovato/restaurante-churrascaria/issues/12) Medir o uso do cardápio com aviso de coleta (responsável).
