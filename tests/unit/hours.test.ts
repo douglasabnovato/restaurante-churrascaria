@@ -7,7 +7,8 @@ const local = (iso: string) => new Date(`${iso}-03:00`)
 
 describe('horários', () => {
   it('lê dia e minutos no fuso do restaurante, não no do aparelho', () => {
-    expect(agoraNoRestaurante(new Date('2026-11-09T02:00:00Z'))).toEqual({ dia: 6, minutos: 23 * 60 })
+    // 02h UTC de segunda é 23h de domingo em Juiz de Fora
+    expect(agoraNoRestaurante(new Date('2026-11-09T02:00:00Z'))).toEqual({ dia: 0, minutos: 23 * 60 })
     expect(agoraNoRestaurante(local('2026-11-09T11:00:00'))).toEqual({ dia: 1, minutos: 11 * 60 })
   })
   it('delivery: fechado antes das 11h, aberto até 14h59 e fechado às 15h', () => {
