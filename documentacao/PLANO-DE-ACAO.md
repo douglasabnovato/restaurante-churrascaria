@@ -133,3 +133,52 @@ Timebox: 50 min.
 **Verificação no navegador (09/11/2026).** Build de produção em `vite preview`, Playwright com relógio fixo: às 20h a opção "Delivery" fica desabilitada e o aviso "Delivery fechado agora. Horário: todos os dias das 11:00 às 15:00." aparece; às 12h a opção fica disponível e não há aviso. axe-core 4.14 (WCAG 2 A e AA) sem violações no diálogo nos dois casos.
 
 **Revisão independente (09/11/2026).** Um subagente que não viu o código leu só o diff e esta seção. Corrigido: o teste do salão não conferia o fechamento das 17h30. Conferido sem mudança: os ícones existem em `public/` (o diff passado ao revisor não incluía os binários). Aceito: com o checkout aberto antes das 11h, a opção "Delivery" só libera ao reabrir o diálogo (o envio confere o horário de novo).
+
+## Ciclo de 09/11/2026
+
+> Branch `feature/2026-11-09` criada a partir de `developer/sprint-2026-11-12`; PR para a sprint. O PR da sprint para a `main` (#22) fica aberto para revisão do responsável. Nível: Vitrine (N2), 12 critérios. Escopo: só o que o código resolve. Pages e a Variable `PAGES_VIA_ACTIONS` não foram tocados (#2).
+
+### Produto
+
+**Problema e público.** Sem mudança. O que faltava do lado do código era provar que o pedido fecha sem mouse (critério 8, #19).
+
+**O que a pesquisa trouxe.**
+
+| Ideia | O que levamos para o projeto | Fonte |
+|---|---|---|
+| No diálogo modal, Tab e Shift+Tab circulam só dentro dele; ao fechar, o foco volta para quem o abriu ou, se ele não existir mais, para um ponto lógico do fluxo | Armadilha de foco no checkout; o foco volta ao "Avançar" ou, com o carrinho vazio (botão desativado), ao conteúdo; na confirmação, vai para o título | [W3C APG: dialog (modal) pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialogmodal/), [UXPin: restore focus after modal dialogs](https://www.uxpin.com/studio/blog/restore-focus-after-modal-dialogs/) |
+| A espera para começar a baixar o recurso do LCP costuma ser a maior fase; imagem de outra origem paga uma conexão nova | Medido: o LCP é a 1ª imagem do carrossel (Unsplash), com mediana local de 2,49 s; trazer a imagem para o site vira a #23 | [web.dev: optimize LCP](https://web.dev/optimize-lcp/) |
+
+**Backlog priorizado (impacto × esforço).**
+
+| Prioridade | Item | Impacto | Esforço | Destino |
+|---|---|---|---|---|
+| 1 | Pedido só com teclado: armadilha e retorno de foco, com teste no CI | Médio | Médio | Este ciclo (#19) |
+| 2 | Medição local do LCP no build atual | Médio | Baixo | Este ciclo (#9) |
+| 3 | Primeira imagem do carrossel no próprio site, com preload | Médio | Baixo | Issue (#23) |
+| 4 | Publicar a versão atual | Alto | Baixo | Responsável (#2) |
+
+**Fora do escopo.** Feriados (#18), observação no painel (#13, precisa publicar regras).
+
+### Engenharia
+
+**Arquitetura.** `CheckoutModal.vue` trata `keydown.tab` no overlay: com o foco no último elemento focável (ou fora do diálogo), Tab volta ao primeiro; Shift+Tab no primeiro (ou no próprio diálogo) vai ao último. Ao abrir, guarda `document.activeElement`; ao fechar, devolve o foco a ele, se ainda existir e não estiver desativado, ou ao `#conteudo` (`tabindex="-1"`). Com `isSubmitted`, o foco vai para o título "Pedido enviado!" (`tabindex="-1"`). O teste `e2e/pedido-teclado.spec.ts` roda sobre `vite build` + `vite preview` em porta própria, com as variáveis `VITE_FIREBASE_*` vazias (nada é gravado), rede externa cortada e `window.open` trocado por um objeto que guarda a URL do WhatsApp.
+
+**Riscos.**
+- O build do teste não tem Firebase: o registro no Firestore não é exercitado no navegador (segue coberto pelos testes de regras no emulador).
+- A mediana local de 2,49 s está no limite; a rede do Unsplash pode passar de 2,5 s (#23).
+
+**Qualidade.**
+- Testes: Vitest 11, regras do Firestore no emulador, Playwright 4 (2 testes × claro e escuro). Sem a correção do diálogo, o teste de teclado falha na armadilha de foco (conferido em 09/11/2026).
+- Desempenho e acessibilidade: ver `MVP.md`.
+
+**Definição de pronto.** `vue-tsc`, Vitest, Playwright e build passam; CI verde no PR para a sprint; `MVP.md`, plano e README atualizados; comentário no PR #22.
+
+### Plano de ação
+
+**Este ciclo executa.**
+1. Armadilha e retorno de foco no checkout e foco na confirmação (#19).
+2. Teste de ponta a ponta do pedido por teclado, com axe, no CI (#19).
+3. Medição local do LCP no build atual (#9).
+
+**Vira issue ou segue em issue.** #23 (imagem do carrossel no site); #2, #11, #12, #16 e #21 (responsável); #9, #13 e #18 seguem. #19 recebe a evidência por comentário e fecha depois do merge na `main`.
