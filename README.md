@@ -4,11 +4,16 @@
 
 ---
 
-## Estado e próximos passos (ciclo de 07/11/2026)
+## Estado e próximos passos (ciclo de 09/11/2026)
 
-Nível: Vitrine (N2). **4 de 12** critérios do MVP atendidos; não finalizado. O site no ar (https://douglasabnovato.github.io/restaurante-churrascaria/, HTTP 200 em 09/11/2026) ainda é o build antigo da pasta `docs/`: a publicação pelo Actions espera a troca da fonte do Pages (#2).
+Nível: Vitrine (N2). **6 de 12** critérios do MVP atendidos; **finalizado** do lado do código (o que falta depende do responsável, com issue). O site no ar (https://douglasabnovato.github.io/restaurante-churrascaria/, HTTP 200 em 09/11/2026) ainda é o build antigo da pasta `docs/`: a publicação pelo Actions espera a troca da fonte do Pages (#2).
 
-**O que foi feito no ciclo de 07/11/2026**
+**O que foi feito no ciclo de 09/11/2026**
+- O checkout prende o foco enquanto está aberto, devolve o foco ao fechar e leva o foco à confirmação; o pedido fecha só com teclado (#19).
+- Teste de ponta a ponta no CI: `npx playwright install chromium` e `npm run test:e2e` (sem Firebase, WhatsApp simulado).
+- LCP local no build atual: mediana de 2,49 s (no ar, só depois da publicação, #2).
+
+**Ciclo de 07/11/2026**
 - Horários num só lugar ([`src/domain/hours.ts`](src/domain/hours.ts)), no fuso de Juiz de Fora; fora do horário (11h às 15h), o delivery fica indisponível no checkout, com aviso lido por leitor de tela (#14).
 - Ícones PNG de 192 e 512 px da marca (um maskable) no manifesto do PWA (#15).
 - `documentacao/MVP.md` com uma tabela só e histórico; plano do ciclo em `documentacao/PLANO-DE-ACAO.md`.
@@ -16,7 +21,7 @@ Nível: Vitrine (N2). **4 de 12** critérios do MVP atendidos; não finalizado. 
 **Ciclo de 03/11/2026:** CI nos PRs, `.env` fora do Git, carrossel mais leve, trava do deploy e observação no pedido (#10, #1).
 
 **O que queremos fazer**
-- [#21](https://github.com/douglasabnovato/restaurante-churrascaria/issues/21) Mesclar o ciclo de 07/11 (responsável).
+- [#21](https://github.com/douglasabnovato/restaurante-churrascaria/issues/21) Mesclar a sprint na `main` pelo PR #22 (responsável).
 - [#2](https://github.com/douglasabnovato/restaurante-churrascaria/issues/2) Publicar a versão atual do site (responsável).
 - [#11](https://github.com/douglasabnovato/restaurante-churrascaria/issues/11) Proteger a `main` com PR e CI obrigatórios (responsável).
 - [#12](https://github.com/douglasabnovato/restaurante-churrascaria/issues/12) Medir o uso do cardápio com aviso de coleta (responsável).
@@ -24,11 +29,11 @@ Nível: Vitrine (N2). **4 de 12** critérios do MVP atendidos; não finalizado. 
 - [#9](https://github.com/douglasabnovato/restaurante-churrascaria/issues/9) Medir e reduzir o LCP móvel no site publicado (depois da #2).
 - [#13](https://github.com/douglasabnovato/restaurante-churrascaria/issues/13) Mostrar a observação do pedido no painel.
 - [#18](https://github.com/douglasabnovato/restaurante-churrascaria/issues/18) Fechar o delivery em feriados e dias de exceção.
-- [#19](https://github.com/douglasabnovato/restaurante-churrascaria/issues/19) Testar o envio do pedido só com teclado.
+- [#23](https://github.com/douglasabnovato/restaurante-churrascaria/issues/23) Servir a primeira imagem do carrossel pelo próprio site.
 
 **Onde está a documentação**
 - Estado e critérios: [documentacao/MVP.md](documentacao/MVP.md).
-- Plano do ciclo: [documentacao/PLANO-DE-ACAO.md](documentacao/PLANO-DE-ACAO.md), seção "Ciclo de 07/11/2026".
+- Plano do ciclo: [documentacao/PLANO-DE-ACAO.md](documentacao/PLANO-DE-ACAO.md), seção "Ciclo de 09/11/2026".
 - Publicação: [documentacao/DEPLOY.md](documentacao/DEPLOY.md).
 
 ---
