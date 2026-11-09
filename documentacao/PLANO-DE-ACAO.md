@@ -129,3 +129,7 @@ Timebox: 50 min.
 3. `documentacao/MVP.md` com uma tabela só e histórico; README com o ciclo.
 
 **Vira issue ou segue em issue.** #2, #11, #12 e #16 (responsável); #9 (depois da #2), #13 (precisa das regras publicadas pelo responsável), #18 (feriados) e #19 (envio por teclado) (agente).
+
+**Verificação no navegador (09/11/2026).** Build de produção em `vite preview`, Playwright com relógio fixo: às 20h a opção "Delivery" fica desabilitada e o aviso "Delivery fechado agora. Horário: todos os dias das 11:00 às 15:00." aparece; às 12h a opção fica disponível e não há aviso. axe-core 4.14 (WCAG 2 A e AA) sem violações no diálogo nos dois casos.
+
+**Revisão independente (09/11/2026).** Um subagente que não viu o código leu só o diff e esta seção. Corrigido: o teste do salão não conferia o fechamento das 17h30. Conferido sem mudança: os ícones existem em `public/` (o diff passado ao revisor não incluía os binários). Aceito: com o checkout aberto antes das 11h, a opção "Delivery" só libera ao reabrir o diálogo (o envio confere o horário de novo).
