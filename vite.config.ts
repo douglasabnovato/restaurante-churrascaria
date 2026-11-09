@@ -1,4 +1,4 @@
-/* Build com Vite + PWA para o GitHub Pages (pasta dist/, publicada pelo GitHub Actions); ícones do manifesto apontam para o SVG que existe em public/ */
+/* Build com Vite + PWA para o GitHub Pages (pasta dist/, publicada pelo GitHub Actions); ícones do manifesto em PNG de 192 e 512 px (um maskable) e SVG da marca, em public/ (#15) */
 /// <reference types="vitest/config" />
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
@@ -20,12 +20,10 @@ export default defineConfig({
         display: 'standalone',
         lang: 'pt-BR',
         icons: [
-          {
-            src: 'favicon.svg',
-            sizes: 'any',
-            type: 'image/svg+xml',
-            purpose: 'any'
-          }
+          { src: 'icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: 'icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: 'icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' }
         ]
       }
     })

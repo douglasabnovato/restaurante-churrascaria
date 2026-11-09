@@ -4,29 +4,31 @@
 
 ---
 
-## Estado e próximos passos (ciclo de 03/11/2026)
+## Estado e próximos passos (ciclo de 07/11/2026)
 
-**O que foi feito**
-- CI na `main` e nos PRs para `developer/**`: testes, regras do Firestore no emulador e build ([#10](https://github.com/douglasabnovato/restaurante-churrascaria/pull/10), que traz o [#1](https://github.com/douglasabnovato/restaurante-churrascaria/pull/1)).
-- `.env` fora do versionamento; a configuração vem das Variables do repositório (#1).
-- Primeira imagem do carrossel menor e priorizada: LCP do build local de 4,22 s para 2,53 s (#1).
-- Deploy pelo Actions travado até a variável `PAGES_VIA_ACTIONS=true`, para a `main` não ficar vermelha antes da troca do Pages (#10).
-- Observação opcional no pedido (ex.: ponto da carne), enviada no WhatsApp, com testes (#10).
-- Regras do Firestore publicadas em 01/11/2026: leitura sem login é recusada.
+Nível: Vitrine (N2). **4 de 12** critérios do MVP atendidos; não finalizado. O site no ar (https://douglasabnovato.github.io/restaurante-churrascaria/, HTTP 200 em 09/11/2026) ainda é o build antigo da pasta `docs/`: a publicação pelo Actions espera a troca da fonte do Pages (#2).
+
+**O que foi feito no ciclo de 07/11/2026**
+- Horários num só lugar ([`src/domain/hours.ts`](src/domain/hours.ts)), no fuso de Juiz de Fora; fora do horário (11h às 15h), o delivery fica indisponível no checkout, com aviso lido por leitor de tela (#14).
+- Ícones PNG de 192 e 512 px da marca (um maskable) no manifesto do PWA (#15).
+- `documentacao/MVP.md` com uma tabela só e histórico; plano do ciclo em `documentacao/PLANO-DE-ACAO.md`.
+
+**Ciclo de 03/11/2026:** CI nos PRs, `.env` fora do Git, carrossel mais leve, trava do deploy e observação no pedido (#10, #1).
 
 **O que queremos fazer**
+- [#21](https://github.com/douglasabnovato/restaurante-churrascaria/issues/21) Mesclar o ciclo de 07/11 (responsável).
 - [#2](https://github.com/douglasabnovato/restaurante-churrascaria/issues/2) Publicar a versão atual do site (responsável).
 - [#11](https://github.com/douglasabnovato/restaurante-churrascaria/issues/11) Proteger a `main` com PR e CI obrigatórios (responsável).
 - [#12](https://github.com/douglasabnovato/restaurante-churrascaria/issues/12) Medir o uso do cardápio com aviso de coleta (responsável).
 - [#16](https://github.com/douglasabnovato/restaurante-churrascaria/issues/16) Confirmar a meta da hipótese (responsável).
-- [#9](https://github.com/douglasabnovato/restaurante-churrascaria/issues/9) Reduzir o LCP móvel do cardápio.
+- [#9](https://github.com/douglasabnovato/restaurante-churrascaria/issues/9) Medir e reduzir o LCP móvel no site publicado (depois da #2).
 - [#13](https://github.com/douglasabnovato/restaurante-churrascaria/issues/13) Mostrar a observação do pedido no painel.
-- [#14](https://github.com/douglasabnovato/restaurante-churrascaria/issues/14) Avisar quando o delivery está fora do horário.
-- [#15](https://github.com/douglasabnovato/restaurante-churrascaria/issues/15) Ícones PNG de 192 e 512 px no PWA.
+- [#18](https://github.com/douglasabnovato/restaurante-churrascaria/issues/18) Fechar o delivery em feriados e dias de exceção.
+- [#19](https://github.com/douglasabnovato/restaurante-churrascaria/issues/19) Testar o envio do pedido só com teclado.
 
 **Onde está a documentação**
 - Estado e critérios: [documentacao/MVP.md](documentacao/MVP.md).
-- Plano do ciclo: [documentacao/PLANO-DE-ACAO.md](documentacao/PLANO-DE-ACAO.md), seção "Ciclo de 03/11/2026".
+- Plano do ciclo: [documentacao/PLANO-DE-ACAO.md](documentacao/PLANO-DE-ACAO.md), seção "Ciclo de 07/11/2026".
 - Publicação: [documentacao/DEPLOY.md](documentacao/DEPLOY.md).
 
 ---
@@ -248,6 +250,8 @@ sabor-e-churrasco/
   * Segunda a Sábado: 10:30h às 17:30h
   * Domingo: 10:30h às 15:30h
   * Delivery: Todos os dias das 11:00h às 15:00h
+
+Os horários ficam num só lugar do código, [`src/domain/hours.ts`](src/domain/hours.ts): o rodapé mostra e o checkout consulta (fora do horário, o delivery fica indisponível).
 
 ---
 Feito com 💻 e 🔥 por **Douglas A B Novato**.
