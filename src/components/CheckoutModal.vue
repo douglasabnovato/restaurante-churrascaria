@@ -11,10 +11,13 @@
 
         <div class="mb-3.5">
           <label for="order-type" class="block text-xs font-bold text-dark mb-1.5">Tipo de pedido</label>
-          <select id="order-type" v-model="orderType" class="w-full p-3 border border-slate-400 rounded-lg text-sm bg-body">
+          <select id="order-type" v-model="orderType" :aria-describedby="deliveryOk ? undefined : 'delivery-status'" class="w-full p-3 border border-slate-400 rounded-lg text-sm bg-body">
             <option value="mesa">Consumo no local (mesa)</option>
-            <option value="delivery">Delivery (entrega em casa)</option>
+            <option value="delivery" :disabled="!deliveryOk">Delivery (entrega em casa){{ deliveryOk ? '' : ' · fechado agora' }}</option>
           </select>
+          <p v-if="!deliveryOk" id="delivery-status" role="status" class="text-xs text-amber-900 bg-amber-100 rounded-md p-2 mt-1.5">
+            Delivery fechado agora. Horário: {{ textoDelivery().toLowerCase() }}.
+          </p>
         </div>
 
         <div v-if="orderType === 'mesa'" class="mb-3.5">
@@ -61,6 +64,7 @@
 import { nextTick, ref, watch } from 'vue'
 import type { OrderType } from '../types'
 import { NOTE_MAX, validateCheckout } from '../domain/order'
+import { deliveryAberto, textoDelivery } from '../domain/hours'
 
 const props = defineProps<{ isOpen: boolean; isSubmitted: boolean; sending?: boolean; orderCode?: string }>()
 const emit = defineEmits(['close', 'send', 'reset'])
@@ -71,18 +75,25 @@ const address = ref('')
 const note = ref('')
 const error = ref('')
 const dialogEl = ref<HTMLElement | null>(null)
+/* Conferido a cada abertura e no envio (#14) */
+const deliveryOk = ref(deliveryAberto())
 
 /* Leva o foco para o diálogo ao abrir */
 watch(() => props.isOpen, async (open) => {
   if (!open) return
   error.value = ''
+  deliveryOk.value = deliveryAberto()
+  if (!deliveryOk.value && orderType.value === 'delivery') orderType.value = 'mesa'
   await nextTick()
   dialogEl.value?.focus()
 })
 
 /* Valida e envia */
 const handleSubmit = () => {
-  error.value = validateCheckout(orderType.value, String(tableNum.value), address.value)
+  deliveryOk.value = deliveryAberto()
+  error.value = orderType.value === 'delivery' && !deliveryOk.value
+    ? `O delivery está fechado agora (horário: ${textoDelivery().toLowerCase()}). Escolha consumo no local.`
+    : validateCheckout(orderType.value, String(tableNum.value), address.value)
   if (error.value) return
   emit('send', orderType.value, String(tableNum.value), address.value, note.value)
 }

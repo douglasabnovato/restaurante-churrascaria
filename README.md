@@ -249,5 +249,7 @@ sabor-e-churrasco/
   * Domingo: 10:30h às 15:30h
   * Delivery: Todos os dias das 11:00h às 15:00h
 
+Os horários ficam num só lugar do código, [`src/domain/hours.ts`](src/domain/hours.ts): o rodapé mostra e o checkout consulta (fora do horário, o delivery fica indisponível).
+
 ---
 Feito com 💻 e 🔥 por **Douglas A B Novato**.
