@@ -1,6 +1,6 @@
-<!-- Finalização do pedido em diálogo acessível: valida mesa/endereço, fecha com Esc e mostra o código do pedido -->
+<!-- Finalização do pedido em diálogo acessível: valida mesa/endereço, fecha com Esc, prende o foco enquanto aberto, devolve o foco ao fechar e mostra o código do pedido (#19) -->
 <template>
-  <div v-if="isOpen" class="fixed inset-0 bg-black/60 flex justify-center items-end z-40" @keydown.esc="!isSubmitted && $emit('close')">
+  <div v-if="isOpen" class="fixed inset-0 bg-black/60 flex justify-center items-end z-40" @keydown.esc="!isSubmitted && $emit('close')" @keydown.tab="trapFocus">
     <div ref="dialogEl" role="dialog" aria-modal="true" aria-labelledby="checkout-title" tabindex="-1"
       class="bg-surface w-full max-w-[480px] rounded-t-2xl p-6 animate-slide-up outline-none">
       <form v-if="!isSubmitted" novalidate @submit.prevent="handleSubmit">
@@ -49,7 +49,7 @@
 
       <div v-else class="text-center py-3" role="status">
         <div class="text-5xl text-whatsapp mb-2.5" aria-hidden="true">✓</div>
-        <h2 id="checkout-title" class="text-lg font-extrabold text-primary-dark mb-2">Pedido enviado!</h2>
+        <h2 id="checkout-title" ref="successTitle" tabindex="-1" class="text-lg font-extrabold text-primary-dark mb-2 outline-none">Pedido enviado!</h2>
         <p class="text-sm text-slate-600 mb-2">Código do pedido: <strong>#{{ orderCode }}</strong></p>
         <p class="text-xs text-slate-600 mb-6 leading-relaxed">Confirme o envio da mensagem no WhatsApp para concluir.</p>
         <button type="button" @click="$emit('reset')" class="w-full bg-primary text-white font-extrabold text-sm py-3 px-5 rounded-lg cursor-pointer">
@@ -75,18 +75,57 @@ const address = ref('')
 const note = ref('')
 const error = ref('')
 const dialogEl = ref<HTMLElement | null>(null)
+const successTitle = ref<HTMLElement | null>(null)
+/* Elemento que tinha o foco antes de abrir (o botão "Avançar") */
+let returnFocusTo: HTMLElement | null = null
 /* Conferido a cada abertura e no envio (#14) */
 const deliveryOk = ref(deliveryAberto())
 
-/* Leva o foco para o diálogo ao abrir */
+/* Leva o foco para o diálogo ao abrir e devolve ao fechar */
 watch(() => props.isOpen, async (open) => {
-  if (!open) return
+  if (!open) {
+    await nextTick()
+    const target = returnFocusTo && returnFocusTo.isConnected && !(returnFocusTo as HTMLButtonElement).disabled
+      ? returnFocusTo
+      : document.getElementById('conteudo')
+    target?.focus()
+    returnFocusTo = null
+    return
+  }
+  returnFocusTo = document.activeElement instanceof HTMLElement ? document.activeElement : null
   error.value = ''
   deliveryOk.value = deliveryAberto()
   if (!deliveryOk.value && orderType.value === 'delivery') orderType.value = 'mesa'
   await nextTick()
   dialogEl.value?.focus()
 })
+
+/* Com o pedido enviado, o formulário some: o foco vai para o título da confirmação */
+watch(() => props.isSubmitted, async (submitted) => {
+  if (!submitted) return
+  await nextTick()
+  successTitle.value?.focus()
+})
+
+/* Mantém o Tab dentro do diálogo (aria-modal): do último volta ao primeiro e vice-versa */
+const FOCUSABLE = 'button:not([disabled]), select:not([disabled]), input:not([disabled]), textarea:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+const trapFocus = (event: KeyboardEvent) => {
+  const dialog = dialogEl.value
+  if (!dialog) return
+  const items = Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE))
+  if (items.length === 0) { event.preventDefault(); dialog.focus(); return }
+  const first = items[0]
+  const last = items[items.length - 1]
+  const active = document.activeElement
+  const outside = !dialog.contains(active)
+  if (event.shiftKey && (active === first || active === dialog || outside)) {
+    event.preventDefault()
+    last.focus()
+  } else if (!event.shiftKey && (active === last || outside)) {
+    event.preventDefault()
+    first.focus()
+  }
+}
 
 /* Valida e envia */
 const handleSubmit = () => {
