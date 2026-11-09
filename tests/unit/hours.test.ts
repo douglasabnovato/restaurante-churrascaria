@@ -20,7 +20,8 @@ describe('horários', () => {
   })
   it('salão: até 17h30 na semana e até 15h30 no domingo', () => {
     expect(salaoAberto(local('2026-11-09T10:29:00'))).toBe(false)
-    expect(salaoAberto(local('2026-11-09T17:00:00'))).toBe(true)
+    expect(salaoAberto(local('2026-11-09T17:29:00'))).toBe(true)
+    expect(salaoAberto(local('2026-11-09T17:30:00'))).toBe(false)
     expect(salaoAberto(local('2026-11-08T15:29:00'))).toBe(true)
     expect(salaoAberto(local('2026-11-08T16:00:00'))).toBe(false)
   })
