@@ -4,6 +4,8 @@ import AxeBuilder from '@axe-core/playwright'
 
 /* Corta qualquer rede externa e troca o window.open por um objeto que só guarda a URL do WhatsApp */
 test.beforeEach(async ({ page, context }) => {
+  // Relógio fixo numa terça às 12h em Juiz de Fora: o resultado não depende da hora do CI
+  await page.clock.setFixedTime(new Date('2026-11-10T12:00:00-03:00'))
   await context.route(/^https?:\/\/(?!localhost)/, (route) => route.abort())
   await page.addInitScript(() => {
     const w = window as unknown as { __whatsapp?: string }
@@ -93,7 +95,7 @@ test('envia o pedido de mesa usando só o teclado', async ({ page }) => {
   await expect(titulo).toBeFocused()
   const whatsapp = await page.evaluate(() => (window as unknown as { __whatsapp?: string }).__whatsapp ?? '')
   expect(whatsapp).toContain('https://wa.me/5500000000000?text=')
-  expect(decodeURIComponent(whatsapp)).toContain('4')
+  expect(decodeURIComponent(whatsapp)).toContain('*Mesa:* 4')
   expect(await violacoesGraves(page, '[role="dialog"]')).toEqual([])
 
   // Volta ao cardápio: carrinho vazio, "Avançar" desativado, foco no conteúdo
@@ -112,7 +114,8 @@ test('mesa vazia mostra o erro sem fechar o diálogo', async ({ page }) => {
   await page.keyboard.press('Enter')
   await tabAte(page, 'Enviar pedido no WhatsApp')
   await page.keyboard.press('Enter')
-  await expect(page.getByRole('alert')).not.toBeEmpty()
+  await expect(page.getByLabel('Tipo de pedido')).toHaveValue('mesa')
+  await expect(page.getByRole('alert')).toHaveText('Informe o número da mesa (1 a 999).')
   await expect(page.getByRole('dialog')).toBeVisible()
   expect(await focoDentroDoDialogo(page)).toBe(true)
 })

@@ -26,7 +26,7 @@ export default defineConfig({
     command: `npx vite build --outDir .build-e2e --emptyOutDir && npx vite preview --outDir .build-e2e --port ${port} --strictPort`,
     url: `http://localhost:${port}/restaurante-churrascaria/`,
     env: { ...semFirebase, VITE_WHATSAPP_NUMBER: '5500000000000' },
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 180000,
   },
 })

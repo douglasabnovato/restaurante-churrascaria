@@ -92,7 +92,7 @@ watch(() => props.isOpen, async (open) => {
     returnFocusTo = null
     return
   }
-  returnFocusTo = document.activeElement instanceof HTMLElement ? document.activeElement : null
+  returnFocusTo = document.activeElement instanceof HTMLElement && document.activeElement !== document.body ? document.activeElement : null
   error.value = ''
   deliveryOk.value = deliveryAberto()
   if (!deliveryOk.value && orderType.value === 'delivery') orderType.value = 'mesa'
@@ -112,7 +112,7 @@ const FOCUSABLE = 'button:not([disabled]), select:not([disabled]), input:not([di
 const trapFocus = (event: KeyboardEvent) => {
   const dialog = dialogEl.value
   if (!dialog) return
-  const items = Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE))
+  const items = Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((el) => el.getClientRects().length > 0)
   if (items.length === 0) { event.preventDefault(); dialog.focus(); return }
   const first = items[0]
   const last = items[items.length - 1]

@@ -182,3 +182,5 @@ Timebox: 50 min.
 3. Medição local do LCP no build atual (#9).
 
 **Vira issue ou segue em issue.** #23 (imagem do carrossel no site); #2, #11, #12, #16 e #21 (responsável); #9, #13 e #18 seguem. #19 recebe a evidência por comentário e fecha depois do merge na `main`.
+
+**Revisão independente (09/11/2026).** Um subagente que não viu o código leu só o diff e esta seção. Corrigido: relógio fixo no teste (terça, 12h, horário de Brasília), para não depender da hora do CI; conferência de `*Mesa:* 4` na mensagem do WhatsApp em vez de só "4"; teste da mesa vazia confere o tipo "mesa" e o texto exato do erro; a armadilha de foco ignora elementos ocultos; foco no `body` ao abrir (toque no Safari) cai no `#conteudo` ao fechar; o Playwright não reaproveita servidor já aberto na porta. Nenhum caminho para gravar pedido real foi apontado.
