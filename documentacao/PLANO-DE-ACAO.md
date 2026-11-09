@@ -74,3 +74,58 @@ Timebox: 50 min.
 3. `documentacao/MVP.md` com o resumo batendo com a tabela; README com o estado do ciclo.
 
 **Vira issue.** #2, #11, #12, #16 (responsável); #9, #13, #14, #15 (agente).
+
+## Ciclo de 07/11/2026
+
+> Branch `feature/2026-11-07` → `developer/sprint-2026-11-12` → `main` (o PR para a `main` fica aberto para revisão do responsável). Nível: Vitrine (N2), 12 critérios. Escopo: só o que o código resolve; a publicação segue travada pela Variable `PAGES_VIA_ACTIONS` até o responsável trocar a fonte do Pages (#2), e isso não foi mexido.
+
+### Produto
+
+**Problema e público.** Sem mudança: clientes pedem pelo celular e mandam o pedido pelo WhatsApp; a equipe acompanha no painel.
+
+**Hipótese e meta.** Sem mudança; confirmar é do responsável (#16).
+
+**O que a pesquisa trouxe.**
+
+| Ideia | O que levamos para o projeto | Fonte |
+|---|---|---|
+| Plataformas de cardápio digital configuram o horário do delivery por dia e mostram ao cliente se a loja está aberta; fora do horário, o item aparece desabilitado e o pedido não fecha | O checkout desabilita a opção "Delivery" fora das 11h às 15h e avisa com `role="status"`; o consumo na mesa segue disponível | [Goomer: horários de delivery e retirada](https://ajuda.goomer.com.br/cardapio-digital/painel/loja/horarios/delivery-e-retirada), [99Food: horário de funcionamento](https://99app.com/99food/restaurantes/guias/configuracao-horario-funcionamento-99food/), [Saipos: cardápio delivery](https://saipos.com/cardapio/cardapio-delivery) |
+| Para instalar o PWA, o Chrome pede ícones de 192 e 512 px; o maskable deve ser um arquivo separado, com a arte na zona segura central | Três PNG da marca (192, 512 e 512 maskable) e um SVG da marca no manifesto | [web.dev: web app manifest](https://web.dev/learn/pwa/web-app-manifest), [Front-End Checklist: PWA installability](https://frontendchecklist.io/rules/html/pwa-installability) |
+
+**Backlog priorizado (impacto × esforço).**
+
+| Prioridade | Item | Impacto | Esforço | Destino |
+|---|---|---|---|---|
+| 1 | Delivery indisponível fora do horário, com horários num só lugar | Médio | Baixo | Este ciclo (#14) |
+| 2 | Ícones PNG do PWA | Baixo | Baixo | Este ciclo (#15) |
+| 3 | Publicar a versão atual (troca da fonte do Pages) | Alto | Baixo | Responsável (#2) |
+| 4 | Observação no painel (precisa publicar regras novas) | Médio | Médio | Issue (#13) |
+| 5 | LCP no site publicado | Médio | Baixo | Depois da #2 (#9) |
+| 6 | Feriados e fechamento manual do delivery | Médio | Médio | Issue #18 |
+| 7 | Envio do pedido só com teclado (critério 8) | Médio | Médio | Issue #19 |
+
+**Fora do escopo.** Pagamento online, integração com caixa, feriados (vira issue).
+
+### Engenharia
+
+**Arquitetura.** `src/domain/hours.ts` guarda os horários (salão na semana e no domingo, delivery) e calcula aberto e fechado com `Intl.DateTimeFormat` no fuso `America/Sao_Paulo`, para o resultado não depender do relógio do aparelho. O `CheckoutModal` consulta ao abrir e ao enviar; o `FooterBar` mostra os mesmos textos. O manifesto do PWA (em `vite.config.ts`) lista os ícones novos de `public/`.
+
+**Riscos.**
+- O horário do aparelho não importa, mas o relógio sim: um celular com a hora errada calcula o fuso a partir de um instante errado.
+- Feriados e fechamentos manuais não estão no código (issue nova).
+- O site no ar continua sendo o build antigo até a #2.
+
+**Qualidade.**
+- Testes: 4 novos no Vitest para os horários (fuso, limites do delivery, salão na semana e no domingo, texto). Regras do Firestore seguem testadas no emulador pelo CI.
+- Acessibilidade: o aviso de fechado usa `role="status"` com texto âmbar-escuro (`text-amber-900`) sobre âmbar-claro (`bg-amber-100`), contraste acima de 4,5:1.
+
+**Definição de pronto.** `npm test`, `npm run test:rules` e `npm run build` passam no CI; `documentacao/MVP.md` com uma tabela só; README com o ciclo.
+
+### Plano de ação
+
+**Este ciclo executa.**
+1. Horários num só lugar e delivery indisponível fora do horário, com testes (#14).
+2. Ícones PNG de 192 e 512 px no PWA (#15).
+3. `documentacao/MVP.md` com uma tabela só e histórico; README com o ciclo.
+
+**Vira issue ou segue em issue.** #2, #11, #12 e #16 (responsável); #9 (depois da #2), #13 (precisa das regras publicadas pelo responsável), #18 (feriados) e #19 (envio por teclado) (agente).
