@@ -6,7 +6,7 @@
 
 ## Estado e próximos passos (ciclo de 09/11/2026)
 
-Nível: Vitrine (N2). **6 de 12** critérios do MVP atendidos; **finalizado** do lado do código (o que falta depende do responsável, com issue). O site no ar (https://douglasabnovato.github.io/restaurante-churrascaria/, HTTP 200 em 09/11/2026) ainda é o build antigo da pasta `docs/`: a publicação pelo Actions espera a troca da fonte do Pages (#2).
+Nível: Vitrine (N2). **6 de 12** critérios do MVP atendidos; **finalizado** do lado do código (o que falta depende do responsável, com issue). A `main` está protegida desde 10/11/2026 (#11); o critério 10 segue parcial até a publicação passar pelo CI (#2). O site no ar (https://douglasabnovato.github.io/restaurante-churrascaria/, HTTP 200 em 09/11/2026) ainda é o build antigo da pasta `docs/`: a publicação pelo Actions espera a troca da fonte do Pages (#2).
 
 **O que foi feito no ciclo de 09/11/2026**
 - O checkout prende o foco enquanto está aberto, devolve o foco ao fechar e leva o foco à confirmação; o pedido fecha só com teclado (#19).
@@ -23,7 +23,6 @@ Nível: Vitrine (N2). **6 de 12** critérios do MVP atendidos; **finalizado** do
 **O que queremos fazer**
 - [#21](https://github.com/douglasabnovato/restaurante-churrascaria/issues/21) Mesclar a sprint na `main` pelo PR #22 (responsável).
 - [#2](https://github.com/douglasabnovato/restaurante-churrascaria/issues/2) Publicar a versão atual do site (responsável).
-- [#11](https://github.com/douglasabnovato/restaurante-churrascaria/issues/11) Proteger a `main` com PR e CI obrigatórios (responsável).
 - [#12](https://github.com/douglasabnovato/restaurante-churrascaria/issues/12) Medir o uso do cardápio com aviso de coleta (responsável).
 - [#16](https://github.com/douglasabnovato/restaurante-churrascaria/issues/16) Confirmar a meta da hipótese (responsável).
 - [#9](https://github.com/douglasabnovato/restaurante-churrascaria/issues/9) Medir e reduzir o LCP móvel no site publicado (depois da #2).
