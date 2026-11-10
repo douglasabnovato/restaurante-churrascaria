@@ -4,14 +4,17 @@
 
 ---
 
-## Estado e próximos passos (ciclo de 09/11/2026)
+## Estado e próximos passos (ciclo de 10/11/2026)
 
-Nível: Vitrine (N2). **6 de 12** critérios do MVP atendidos; **finalizado** do lado do código (o que falta depende do responsável, com issue). A `main` está protegida desde 10/11/2026 (#11); o critério 10 segue parcial até a publicação passar pelo CI (#2). O site no ar (https://douglasabnovato.github.io/restaurante-churrascaria/, HTTP 200 em 09/11/2026) ainda é o build antigo da pasta `docs/`: a publicação pelo Actions espera a troca da fonte do Pages (#2).
+Nível: Vitrine (N2). **7 de 12** critérios do MVP atendidos; **finalizado** do lado do código (o que falta depende do responsável, com issue). A `main` só recebe PR com o job `web` do CI verde. O site no ar (https://douglasabnovato.github.io/restaurante-churrascaria/, HTTP 200 em 10/11/2026) ainda é o build antigo da pasta `docs/`: a publicação pelo Actions espera a troca da fonte do Pages (#2).
 
-**O que foi feito no ciclo de 09/11/2026**
-- O checkout prende o foco enquanto está aberto, devolve o foco ao fechar e leva o foco à confirmação; o pedido fecha só com teclado (#19).
-- Teste de ponta a ponta no CI: `npx playwright install chromium` e `npm run test:e2e` (sem Firebase, WhatsApp simulado).
-- LCP local no build atual: mediana de 2,49 s (no ar, só depois da publicação, #2).
+**O que foi feito no ciclo de 10/11/2026**
+- Medição de uso sem cookie (GoatCounter, código `douglasabnovato`): só no site publicado, com o evento `enviar-pedido`, sem endereço nem telefone. Falta a conta (#12).
+- O Analytics do Firebase deixou de ser ligado: usava cookies e não avisava o visitante.
+- Meta da hipótese decidida no ciclo (revisável, #16).
+
+**Ciclo de 09/11/2026**
+- O checkout prende o foco, devolve o foco ao fechar e leva à confirmação; o pedido fecha só com teclado, com teste no CI (#19). LCP local no build atual: mediana de 2,49 s.
 
 **Ciclo de 07/11/2026**
 - Horários num só lugar ([`src/domain/hours.ts`](src/domain/hours.ts)), no fuso de Juiz de Fora; fora do horário (11h às 15h), o delivery fica indisponível no checkout, com aviso lido por leitor de tela (#14).
@@ -23,12 +26,14 @@ Nível: Vitrine (N2). **6 de 12** critérios do MVP atendidos; **finalizado** do
 **O que queremos fazer**
 - [#21](https://github.com/douglasabnovato/restaurante-churrascaria/issues/21) Mesclar a sprint na `main` pelo PR #22 (responsável).
 - [#2](https://github.com/douglasabnovato/restaurante-churrascaria/issues/2) Publicar a versão atual do site (responsável).
-- [#12](https://github.com/douglasabnovato/restaurante-churrascaria/issues/12) Medir o uso do cardápio com aviso de coleta (responsável).
+- [#12](https://github.com/douglasabnovato/restaurante-churrascaria/issues/12) Criar a conta do GoatCounter (responsável).
 - [#16](https://github.com/douglasabnovato/restaurante-churrascaria/issues/16) Confirmar a meta da hipótese (responsável).
 - [#9](https://github.com/douglasabnovato/restaurante-churrascaria/issues/9) Medir e reduzir o LCP móvel no site publicado (depois da #2).
 - [#13](https://github.com/douglasabnovato/restaurante-churrascaria/issues/13) Mostrar a observação do pedido no painel.
 - [#18](https://github.com/douglasabnovato/restaurante-churrascaria/issues/18) Fechar o delivery em feriados e dias de exceção.
 - [#23](https://github.com/douglasabnovato/restaurante-churrascaria/issues/23) Servir a primeira imagem do carrossel pelo próprio site.
+- [#26](https://github.com/douglasabnovato/restaurante-churrascaria/issues/26) Validar com uma pessoa de fora.
+- [#27](https://github.com/douglasabnovato/restaurante-churrascaria/issues/27) Acompanhar o alerta do `@grpc/grpc-js` no Firebase.
 
 **Onde está a documentação**
 - Estado e critérios: [documentacao/MVP.md](documentacao/MVP.md).

@@ -48,6 +48,8 @@ const focoDentroDoDialogo = (page: Page) =>
 test('envia o pedido de mesa usando só o teclado', async ({ page }) => {
   await page.goto('./')
   await expect(page.getByRole('heading', { name: 'Sabor & Churrasco' })).toBeVisible()
+  // Medição (D5): o GoatCounter não carrega em localhost
+  await expect(page.locator('script[data-goatcounter]')).toHaveCount(0)
 
   // Adiciona o primeiro combo pelo teclado
   await tabAte(page, /^Adicionar 1 /)
