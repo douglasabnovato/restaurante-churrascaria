@@ -8,7 +8,7 @@
 
 **Finalizado:** sim
 
-Tudo o que o código resolve está feito: no ciclo de 09/11/2026 o pedido passou a ser concluído só com teclado, com teste no CI (critério 8), e o LCP local ficou em 2,49 s (critério 7, que só vira "Atende" com a medição no ar). O que falta depende do responsável, cada item com issue `depende-do-responsavel`: publicar a versão atual (#2, que destrava os critérios 3, 7 e 9), proteger a `main` (#11), medir o uso (#12), confirmar a meta (#16) e mesclar a sprint na `main` (#21, PR #22).
+Tudo o que o código resolve está feito: no ciclo de 09/11/2026 o pedido passou a ser concluído só com teclado, com teste no CI (critério 8), e o LCP local ficou em 2,49 s (critério 7, que só vira "Atende" com a medição no ar). O que falta depende do responsável, cada item com issue `depende-do-responsavel`: publicar a versão atual (#2, que destrava os critérios 3, 7 e 9), medir o uso (#12), confirmar a meta (#16) e mesclar a sprint na `main` (#21, PR #22). A `main` está protegida desde 10/11/2026 (#11).
 
 ## Problema e hipótese
 
@@ -18,7 +18,7 @@ Tudo o que o código resolve está feito: no ciclo de 09/11/2026 o pedido passou
 
 ## 1. Critérios
 
-| # | Critério | Como verificar | Situação em 09/11/2026 (ciclo de 09/11) |
+| # | Critério | Como verificar | Situação em 09/11/2026 (ciclo de 09/11; critério 10 revisto em 10/11/2026) |
 |---|---|---|---|
 | 1 | Problema e público claros | Dá para explicar em uma frase | Atende |
 | 2 | Hipótese a validar | Existe uma aposta escrita, com meta | Parcial: meta proposta; confirmar é do responsável (#16) |
@@ -29,7 +29,7 @@ Tudo o que o código resolve está feito: no ciclo de 09/11/2026 o pedido passou
 | 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Parcial: no build atual, Lighthouse 12.8.2 móvel local em 09/11/2026 (`vite preview`, `timeout 150`): 2,56 s (TBT 870 ms), 2,44 s (100 ms) e 2,49 s (10.028 ms, CPU disputada), mediana 2,49 s; elemento do LCP: a 1ª imagem do carrossel (Unsplash). No ar, 6,04 s na versão antiga (02/11/2026); medir no ar depende da publicação (#2, #9). Folga pequena: #23 |
 | 8 | Acessibilidade básica | Lighthouse e teclado | Atende no build atual: acessibilidade 1,00 nas 3 execuções do Lighthouse de 09/11/2026. `npm run test:e2e` (Playwright 1.64.1 e axe-core 4.14, celular, modos claro e escuro, sem Firebase e com o WhatsApp simulado) adiciona um item, abre o checkout, escolhe mesa e envia só com Tab, Enter e setas; o foco fica preso no diálogo, volta ao "Avançar" com Esc e vai para "Pedido enviado!" no fim; axe sem violação séria ou crítica no checkout e na confirmação; 4 de 4 passaram em 09/11/2026 (#19). O site publicado (build antigo) tinha 91, por contraste, e muda com a publicação (#2) |
 | 9 | Segurança e conformidade | Riscos decididos; termos de terceiros cumpridos | Parcial: regras publicadas em 01/11/2026 e leitura sem login recusada (403); o site publicado ainda mostra o Dashboard antigo (#2) |
-| 10 | Entrega confiável | Publicação só depois de CI verde | Parcial: CI na `main` e nos PRs; a `main` não está protegida (#11) e a publicação pelo Actions espera a troca do Pages (#2) |
+| 10 | Entrega confiável | Publicação só depois de CI verde | Parcial: a `main` está protegida (`gh api repos/douglasabnovato/restaurante-churrascaria/rulesets`, 10/11/2026: ruleset `principal-protegida` ativo, exige PR, bloqueia force push e exclusão; #11), e o workflow `CI` roda nos PRs para `main` e `developer/**`. Falta: o site ainda sai da pasta `docs/`, sem passar pelo CI; a publicação pelo Actions espera a troca da fonte do Pages (#2) |
 | 11 | Testes dos fluxos críticos | Testes automatizados no CI | Atende: `npx vitest run` com 11 testes (pedido e horários), testes das regras do Firestore no emulador e `npm run test:e2e` com 2 testes em 2 modos (pedido por teclado e mesa vazia), em 09/11/2026 |
 | 12 | Documentação honesta | Qualquer pessoa roda o projeto, e os números estão certos | Atende: README diz que o site no ar é o build antigo e aponta para `src/domain/hours.ts` |
 
