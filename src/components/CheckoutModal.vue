@@ -65,6 +65,7 @@ import { nextTick, ref, watch } from 'vue'
 import type { OrderType } from '../types'
 import { NOTE_MAX, validateCheckout } from '../domain/order'
 import { deliveryAberto, textoDelivery } from '../domain/hours'
+import { registrarEvento } from '../services/medicao'
 
 const props = defineProps<{ isOpen: boolean; isSubmitted: boolean; sending?: boolean; orderCode?: string }>()
 const emit = defineEmits(['close', 'send', 'reset'])
@@ -103,6 +104,7 @@ watch(() => props.isOpen, async (open) => {
 /* Com o pedido enviado, o formulário some: o foco vai para o título da confirmação */
 watch(() => props.isSubmitted, async (submitted) => {
   if (!submitted) return
+  registrarEvento('enviar-pedido')
   await nextTick()
   successTitle.value?.focus()
 })
