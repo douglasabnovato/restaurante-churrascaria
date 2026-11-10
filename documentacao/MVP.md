@@ -1,37 +1,39 @@
 # MVP — Sabor & Churrasco
 
-> Fonte única do estado. Criado em 31/10/2026; revisto em 09/11/2026 (ciclos de 07/11 e de 09/11/2026, plano em [`PLANO-DE-ACAO.md`](PLANO-DE-ACAO.md)). As tabelas anteriores estão em [Histórico](#histórico).
+> Fonte única do estado. Criado em 31/10/2026; revisto em 10/11/2026 (ciclo da faixa de 90%, decisões D1 a D7 em `engenharia/decisoes/2026-11-10-ciclo-faixa-90.md`). As tabelas anteriores estão em [Histórico](#histórico).
 
 **Nível:** Vitrine (N2). Valem os 12 critérios.
 
-**Resumo:** 6 de 12 aplicáveis atendidos
+**Resumo:** 7 de 12 aplicáveis atendidos
 
-**Finalizado:** sim
+**Finalizado:** sim — faltam 3, 5, 7, 9 e 10, que dependem do responsável: publicar a versão atual e trocar a fonte do Pages (#2), criar a conta do GoatCounter (#12) e mesclar a sprint (#21)
 
-Tudo o que o código resolve está feito: no ciclo de 09/11/2026 o pedido passou a ser concluído só com teclado, com teste no CI (critério 8), e o LCP local ficou em 2,49 s (critério 7, que só vira "Atende" com a medição no ar). O que falta depende do responsável, cada item com issue `depende-do-responsavel`: publicar a versão atual (#2, que destrava os critérios 3, 7 e 9), medir o uso (#12), confirmar a meta (#16) e mesclar a sprint na `main` (#21, PR #22). A `main` está protegida desde 10/11/2026 (#11).
+Tudo o que o código resolve está feito. Neste ciclo entrou a medição sem cookie (GoatCounter) com o evento `enviar-pedido`, e o Analytics do Firebase deixou de ser ligado (usava cookies sem aviso). A publicação pelo Actions já existe no CI, travada por `PAGES_VIA_ACTIONS`; o site no ar segue o build antigo da pasta `docs/` até a troca da fonte (#2).
 
 ## Problema e hipótese
 
 **Problema e público:** Clientes do restaurante pedem pelo celular, e a equipe acompanha os pedidos em um painel, sem erro de cálculo manual.
 
-**Hipótese:** Metade dos pedidos do delivery passa pelo cardápio digital em um mês, com menos pedidos corrigidos pela equipe. Proposta inicial, para o responsável confirmar ou trocar (#16). Sem medição, a meta ainda não pode ser conferida.
+**Hipótese (meta do ciclo, texto da proposta mantido):** Metade dos pedidos do delivery passa pelo cardápio digital em um mês, com menos pedidos corrigidos pela equipe. Meta decidida pelo coordenador em 10/11/2026 (decisão D1), revisável pelo responsável (#16). Saberemos pelo GoatCounter (evento `enviar-pedido`) comparado com o total de pedidos do delivery que a equipe registra.
 
 ## 1. Critérios
 
-| # | Critério | Como verificar | Situação em 09/11/2026 (ciclo de 09/11; critério 10 revisto em 10/11/2026) |
-|---|---|---|---|
-| 1 | Problema e público claros | Dá para explicar em uma frase | Atende |
-| 2 | Hipótese a validar | Existe uma aposta escrita, com meta | Parcial: meta proposta; confirmar é do responsável (#16) |
-| 3 | Fluxo principal completo | Uma pessoa conclui sem ajuda | Parcial: no build atual, adicionar item e abrir o checkout foram percorridos no navegador (Playwright, 09/11/2026); o site publicado ainda é o build antigo (`curl` em 09/11/2026: HTTP 200 com o título `sabor-e-churrasco` do build anterior) (#2) |
-| 4 | Escopo enxuto | O que não entra está registrado | Atende: o que fica de fora está na seção "Fora do MVP" (pagamento online, integração com caixa) e no plano; feriados viraram issue (#18). O responsável pode mudar a lista |
-| 5 | Medição de uso | A métrica principal é coletada | Não atende: a métrica do pedido não é coletada (#12) |
-| 6 | Falhas tratadas | Erro, vazio e carregamento têm resposta clara | Atende: painel com carregamento, vazio, erro e permissão; pedido com validação e falha tratada; delivery fora do horário avisa e fica indisponível (Playwright com relógio fixo às 20h e às 12h, 09/11/2026) |
-| 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Parcial: no build atual, Lighthouse 12.8.2 móvel local em 09/11/2026 (`vite preview`, `timeout 150`): 2,56 s (TBT 870 ms), 2,44 s (100 ms) e 2,49 s (10.028 ms, CPU disputada), mediana 2,49 s; elemento do LCP: a 1ª imagem do carrossel (Unsplash). No ar, 6,04 s na versão antiga (02/11/2026); medir no ar depende da publicação (#2, #9). Folga pequena: #23 |
-| 8 | Acessibilidade básica | Lighthouse e teclado | Atende no build atual: acessibilidade 1,00 nas 3 execuções do Lighthouse de 09/11/2026. `npm run test:e2e` (Playwright 1.64.1 e axe-core 4.14, celular, modos claro e escuro, sem Firebase e com o WhatsApp simulado) adiciona um item, abre o checkout, escolhe mesa e envia só com Tab, Enter e setas; o foco fica preso no diálogo, volta ao "Avançar" com Esc e vai para "Pedido enviado!" no fim; axe sem violação séria ou crítica no checkout e na confirmação; 4 de 4 passaram em 09/11/2026 (#19). O site publicado (build antigo) tinha 91, por contraste, e muda com a publicação (#2) |
-| 9 | Segurança e conformidade | Riscos decididos; termos de terceiros cumpridos | Parcial: regras publicadas em 01/11/2026 e leitura sem login recusada (403); o site publicado ainda mostra o Dashboard antigo (#2) |
-| 10 | Entrega confiável | Publicação só depois de CI verde | Parcial: a `main` está protegida (`gh api repos/douglasabnovato/restaurante-churrascaria/rulesets`, 10/11/2026: ruleset `principal-protegida` ativo, exige PR, bloqueia force push e exclusão; #11), e o workflow `CI` roda nos PRs para `main` e `developer/**`. Falta: o site ainda sai da pasta `docs/`, sem passar pelo CI; a publicação pelo Actions espera a troca da fonte do Pages (#2) |
-| 11 | Testes dos fluxos críticos | Testes automatizados no CI | Atende: `npx vitest run` com 11 testes (pedido e horários), testes das regras do Firestore no emulador e `npm run test:e2e` com 2 testes em 2 modos (pedido por teclado e mesa vazia), em 09/11/2026 |
-| 12 | Documentação honesta | Qualquer pessoa roda o projeto, e os números estão certos | Atende: README diz que o site no ar é o build antigo e aponta para `src/domain/hours.ts` |
+| # | Critério | Situação em 10/11/2026 | Evidência ou o que falta | Issue |
+|---|---|---|---|---|
+| 1 | Problema e público claros | Atende | Frase acima | — |
+| 2 | Hipótese a validar | Atende | Meta decidida pelo coordenador em 10/11/2026 (decisão D1), revisável pelo responsável: a hipótese acima | #16 |
+| 3 | Fluxo principal completo | Parcial | No build atual, `npx playwright test` (claro e escuro, Pixel 7), 10/11/2026: 4 de 4, do cardápio a "Pedido enviado!" só com teclado (também no CI, job `web`). No ar, o build antigo: `curl https://douglasabnovato.github.io/restaurante-churrascaria/`, 10/11/2026: `<title>sabor-e-churrasco</title>`, e o build atual tem `Sabor & Churrasco — cardápio e pedidos` | #2 (responsável); validação com pessoa de fora: #26 |
+| 4 | Escopo enxuto | Atende | Seção "Fora do MVP" (pagamento online, integração com caixa); feriados viraram issue (#18) | — |
+| 5 | Medição de uso | Parcial | Código pronto; falta a conta (decisão D5). GoatCounter sem cookie (`src/services/medicao.ts`), só no build de produção fora de localhost, com o evento `enviar-pedido` (sem endereço, telefone nem itens). `npx vitest run`, 10/11/2026: 15 de 15, incluindo `tests/unit/medicao.test.ts`; o Playwright confere que o script não carrega em localhost | #12 (responsável) |
+| 6 | Falhas tratadas | Atende | Painel com carregamento, vazio, erro e permissão; pedido com validação e falha tratada; delivery fora do horário avisa e fica indisponível (Playwright com relógio fixo, 09/11/2026) | — |
+| 7 | Desempenho aceitável | Parcial | No build atual, Lighthouse 12.8.2 móvel local em 09/11/2026: 2,56 / 2,44 / 2,49 s, mediana 2,49 s; elemento do LCP: a 1ª imagem do carrossel. No ar, 6,04 s na versão antiga (02/11/2026). Medir no site depende da publicação (D6) | #2, #9, #23 |
+| 8 | Acessibilidade básica | Atende | `npx playwright test`, 10/11/2026: 4 de 4 (claro e escuro), pedido só com Tab, Enter e setas, foco preso no diálogo, Esc devolve o foco; axe sem violação séria ou crítica no checkout e na confirmação. Lighthouse local: acessibilidade 1,00 (09/11/2026) | — |
+| 9 | Segurança e conformidade | Parcial | Regras do Firestore publicadas em 01/11/2026 (leitura sem login recusada); sem cookie de medição. Falta: o site publicado ainda mostra o Dashboard antigo (#2). `npm audit --omit=dev`, 10/11/2026: 4 altas no `@grpc/grpc-js` 1.9.16 dentro do `@firebase/firestore`, sem correção no pacote; uso no navegador a conferir (#27) | #2 (responsável), #27 |
+| 10 | Entrega confiável | Parcial | `gh api repos/douglasabnovato/restaurante-churrascaria/rules/branches/main`, 10/11/2026: `required_status_checks` (`web`), PR obrigatório, sem force push nem exclusão. O CI publica o `dist/` pelo Actions quando `PAGES_VIA_ACTIONS=true`. Falta: o site ainda sai da pasta `docs/`, sem passar pelo CI | #2 (responsável) |
+| 11 | Testes dos fluxos críticos | Atende | `npx vitest run` (15 testes: pedido, horários e medição), regras do Firestore no emulador e `npm run test:e2e` (4 de 4), no CI, sem `skip` | — |
+| 12 | Documentação honesta | Atende | README diz que o site no ar é o build antigo e como trocar a fonte do Pages | — |
+
+**Atendidos:** 1, 2, 4, 6, 8, 11 e 12. **Parciais:** 3, 5, 7, 9 e 10.
 
 ## 2. Tarefas
 
@@ -45,13 +47,18 @@ Tudo o que o código resolve está feito: no ciclo de 09/11/2026 o pedido passou
 | 6 | Feriados e fechamento manual do delivery | Issue #18 |
 | 7 | Envio do pedido só com teclado | Feito no ciclo de 09/11/2026 (#19) |
 | 9 | Primeira imagem do carrossel pelo próprio site | Issue #23 |
-| 8 | Avaliar o Firebase 13 pelos alertas restantes | Próximo ciclo |
+| 8 | Avaliar o Firebase 13 pelos alertas restantes | Próximo ciclo (#27) |
+| 10 | Medição sem cookie (GoatCounter) e Analytics do Firebase desligado | Feito em 10/11/2026 |
 
 ## 3. Fora do MVP
 
 Pagamento online, integração com caixa e novos recursos antes de resolver a exposição. A lista é uma proposta e pode mudar com a decisão do responsável.
 
 ## Histórico
+
+### Estado de 10/11/2026, antes do ciclo da faixa de 90%
+
+**Resumo:** 6 de 12 aplicáveis atendidos (1, 4, 6, 8, 11 e 12). **Finalizado:** sim. Diferenças para a tabela atual: o 2 estava "Parcial" (meta sem decisão) e o 5 "Não atende" (a métrica do pedido não era coletada).
 
 ### Tabela de 09/11/2026 (ciclo de 07/11/2026)
 
