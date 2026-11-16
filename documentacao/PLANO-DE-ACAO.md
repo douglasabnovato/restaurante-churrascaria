@@ -218,7 +218,7 @@ Timebox: 50 min.
 
 ### Engenharia
 
-**Arquitetura.** O texto do aviso fica em `src/services/medicao.ts` (`AVISO_MEDICAO`), junto da medição, e o `FooterBar.vue` o mostra numa seção "Privacidade". O Playwright roda os mesmos testes em dois projetos: `celular` (Pixel 7) e `desktop` (Chrome, 1280 × 800). Um teste novo roda o axe no `body` do cardápio, confere o aviso e a ausência de rolagem horizontal.
+**Arquitetura.** O texto do aviso fica em `src/services/medicao.ts` (`AVISO_MEDICAO`), junto da medição, e o `FooterBar.vue` o mostra numa seção "Privacidade". O Playwright roda os mesmos testes em dois projetos: `celular` (Pixel 7) e `desktop` (Chrome, 1280 × 800). Testes novos: axe no `body` do cardápio, com o aviso e sem rolagem horizontal; delivery fechado às 20h; e a espera do envio ("Enviando…"), com o módulo `orders-*.js` atrasado por `page.route`.
 
 **Riscos.**
 - O aviso fala da medição do site publicado, que só existe depois da #2 e da conta do GoatCounter (#12).

@@ -103,7 +103,7 @@ O deploy do CI só roda com a Variable `PAGES_VIA_ACTIONS` igual a `true`. Sem e
 
 1. `cd /c/ambiente-projeto/ser-mvp/restaurante-churrascaria`
 2. Conferir que o `.env` tem as variáveis do `.env.example` (incluindo `VITE_WHATSAPP_NUMBER`).
-3. `npm test` (esperado: 4 testes) e `npm run test:rules` (precisa de Java 11+)
+3. `npm test` (esperado: 16 testes em 16/11/2026) e `npm run test:rules` (precisa de Java 21, a versão do CI)
 4. `npm run build` (gera `dist/`) e `npm run preview`: abrir `http://localhost:4173/restaurante-churrascaria/`, montar um pedido e ir a `#/painel`, que pede login.
 
 ### Etapa 2 · Cadastrar as Variables no GitHub

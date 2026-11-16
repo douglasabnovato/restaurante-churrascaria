@@ -191,7 +191,7 @@ Abaixo estão alguns prints que ilustram o funcionamento do Sabor & Churrasco, c
 - [x] Validação de mesa/endereço, totais em centavos, código provisório único quando o contador falha
 - [x] WCAG AA (axe-core sem violações, Lighthouse Acessibilidade 100); carrossel com pausa
 - [x] Firebase carregado só ao enviar o pedido ou abrir o painel: JS inicial de 576 kB para 87 kB
-- [x] Testes: `npm test` (regras do pedido), `npm run test:rules` (regras do Firestore no emulador, precisa de Java 11+) e `npm run test:e2e` (Playwright com axe, no celular e no desktop; o `@axe-core/playwright` 4.14 pede Node 22.12 ou mais novo)
+- [x] Testes: `npm test` (regras do pedido), `npm run test:rules` (regras do Firestore no emulador, precisa de Java 21, a versão do CI) e `npm run test:e2e` (Playwright com axe, no celular e no desktop; o `@axe-core/playwright` 4.14 pede Node 22.12 ou mais novo)
 
 #### Como configurar o painel
 
