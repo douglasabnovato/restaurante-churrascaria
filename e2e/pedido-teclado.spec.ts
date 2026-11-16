@@ -105,6 +105,7 @@ test('envia o pedido de mesa usando só o teclado', async ({ page }) => {
   await page.keyboard.press('Enter')
   await expect(dialogo).toBeHidden()
   await expect(page.getByText('Subtotal (0 itens)')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Avançar' })).toBeDisabled()
   await expect(page.locator('#conteudo')).toBeFocused()
 })
 
@@ -121,6 +122,22 @@ test('cardápio inteiro sem violação grave do axe e com o aviso de coleta no r
   expect(await violacoesGraves(page, 'body')).toEqual([])
   // Sem rolagem horizontal na largura do projeto
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0)
+})
+
+test('às 20h o delivery fica fechado, com aviso lido por leitor de tela (#14)', async ({ page }) => {
+  // Terça às 20h em Juiz de Fora: fora do horário do delivery (11h às 15h)
+  await page.clock.setFixedTime(new Date('2026-11-10T20:00:00-03:00'))
+  await page.goto('./')
+  await tabAte(page, /^Adicionar 1 /)
+  await page.keyboard.press('Enter')
+  await tabAte(page, 'Avançar')
+  await page.keyboard.press('Enter')
+  await expect(page.getByRole('dialog')).toBeFocused()
+  await expect(page.locator('#delivery-status')).toHaveAttribute('role', 'status')
+  await expect(page.locator('#delivery-status')).toContainText('Delivery fechado agora')
+  await expect(page.locator('#order-type option[value="delivery"]')).toBeDisabled()
+  await expect(page.getByLabel('Tipo de pedido')).toHaveValue('mesa')
+  expect(await violacoesGraves(page, '[role="dialog"]')).toEqual([])
 })
 
 test('mesa vazia mostra o erro sem fechar o diálogo', async ({ page }) => {
