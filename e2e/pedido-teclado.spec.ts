@@ -112,20 +112,20 @@ test('envia o pedido de mesa usando só o teclado', async ({ page }) => {
 test('cardápio inteiro sem violação grave do axe e com o aviso de coleta no rodapé (#12)', async ({ page }) => {
   await page.goto('./')
   await expect(page.getByRole('heading', { name: 'Sabor & Churrasco' })).toBeVisible()
-  // Dados reais do cardápio (src/data/menu.ts): todos os produtos aparecem antes do axe
+  // Dados reais do cardápio (src/data/menu.ts): espera o primeiro produto antes do axe
   await expect(page.getByRole('button', { name: /^Adicionar 1 / }).first()).toBeVisible()
   const aviso = page.getByTestId('aviso-medicao')
   await aviso.scrollIntoViewIfNeeded()
   await expect(aviso).toBeVisible()
   await expect(aviso).toContainText('sem cookie')
-  await expect(aviso.getByRole('link', { name: 'Política do GoatCounter' })).toHaveAttribute('href', 'https://www.goatcounter.com/help/privacy')
+  await expect(aviso.getByRole('link', { name: 'Política do GoatCounter (abre em nova aba)' })).toHaveAttribute('href', 'https://www.goatcounter.com/help/privacy')
   expect(await violacoesGraves(page, 'body')).toEqual([])
   // Sem rolagem horizontal na largura do projeto
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0)
 })
 
 test('às 20h o delivery fica fechado, com aviso lido por leitor de tela (#14)', async ({ page }) => {
-  // Terça às 20h em Juiz de Fora: fora do horário do delivery (11h às 15h)
+  // Terça às 20h em Juiz de Fora: fora do horário do delivery (11h às 15h). Substitui o relógio das 12h do beforeEach
   await page.clock.setFixedTime(new Date('2026-11-10T20:00:00-03:00'))
   await page.goto('./')
   await tabAte(page, /^Adicionar 1 /)
@@ -138,6 +138,24 @@ test('às 20h o delivery fica fechado, com aviso lido por leitor de tela (#14)',
   await expect(page.locator('#order-type option[value="delivery"]')).toBeDisabled()
   await expect(page.getByLabel('Tipo de pedido')).toHaveValue('mesa')
   expect(await violacoesGraves(page, '[role="dialog"]')).toEqual([])
+})
+
+test('espera: enquanto o registro do pedido carrega, o botão mostra "Enviando…" e fica desativado', async ({ page }) => {
+  // Atrasa o módulo que registra o pedido (orders-*.js, carregado só no envio) para a espera aparecer
+  let liberar: () => void = () => {}
+  const segurado = new Promise<void>((resolve) => { liberar = resolve })
+  await page.route(/\/assets\/orders-[^/]+\.js$/, async (route) => { await segurado; await route.continue() })
+  await page.goto('./')
+  await page.getByRole('button', { name: /^Adicionar 1 / }).first().click()
+  await page.getByRole('button', { name: 'Avançar' }).click()
+  await page.getByLabel('Tipo de pedido').selectOption('mesa')
+  await page.getByLabel('Número da mesa').fill('7')
+  await page.getByRole('button', { name: 'Enviar pedido no WhatsApp' }).click()
+  const enviando = page.getByRole('button', { name: 'Enviando…' })
+  await expect(enviando).toBeVisible()
+  await expect(enviando).toBeDisabled()
+  liberar()
+  await expect(page.getByRole('heading', { name: 'Pedido enviado!' })).toBeVisible()
 })
 
 test('mesa vazia mostra o erro sem fechar o diálogo', async ({ page }) => {

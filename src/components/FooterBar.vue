@@ -18,7 +18,7 @@
 
     <section aria-labelledby="aviso-medicao-titulo" data-testid="aviso-medicao" class="mb-4 leading-relaxed">
       <h2 id="aviso-medicao-titulo" class="font-bold text-white uppercase text-[0.75rem] mb-1 tracking-wider">Privacidade</h2>
-      <p>{{ AVISO_MEDICAO }} <a :href="POLITICA_MEDICAO" class="underline text-white" rel="noopener" target="_blank">Política do GoatCounter</a></p>
+      <p>{{ AVISO_MEDICAO }} <a :href="POLITICA_MEDICAO" class="underline text-white" rel="noopener noreferrer" target="_blank">Política do GoatCounter (abre em nova aba)</a></p>
     </section>
 
     <div v-if="IS_DEV_WHATSAPP" class="bg-slate-800 text-slate-300 p-3 rounded-md text-[0.72rem] mt-4 border border-slate-700">
