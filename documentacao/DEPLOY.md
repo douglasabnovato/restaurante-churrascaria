@@ -35,7 +35,7 @@ As variáveis `VITE_FIREBASE_*` vão para dentro do JavaScript publicado em qual
 | `VITE_FIREBASE_STORAGE_BUCKET` | `storageBucket` |
 | `VITE_FIREBASE_MESSAGING_SENDER_ID` | `messagingSenderId` |
 | `VITE_FIREBASE_APP_ID` | `appId` |
-| `VITE_FIREBASE_MEASUREMENT_ID` | `measurementId` (opcional; vazio desliga o Analytics) |
+| `VITE_FIREBASE_MEASUREMENT_ID` | `measurementId` (opcional; desde 10/11/2026 o app não liga o Analytics, a medição é a do GoatCounter) |
 | `VITE_WHATSAPP_NUMBER` | número real que recebe os pedidos, só dígitos com DDI e DDD (ex.: `5532999999999`). Vazio usa o WhatsApp de desenvolvimento e mostra o aviso no rodapé |
 
 ### O que foi ajustado

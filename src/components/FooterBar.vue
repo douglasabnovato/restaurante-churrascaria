@@ -11,9 +11,9 @@
 
     <div class="mb-4 leading-relaxed">
       <div class="font-bold text-white uppercase text-[0.75rem] mb-1 tracking-wider">Horários de Atendimento</div>
-      • Segunda a Sábado: 10:30 às 17:30<br>
-      • Domingo: 10:30 às 15:30<br>
-      • Delivery: Todos os dias das 11:00 às 15:00
+      • Segunda a Sábado: {{ textoSalaoSemana() }}<br>
+      • Domingo: {{ textoSalaoDomingo() }}<br>
+      • Delivery: {{ textoDelivery() }}
     </div>
 
     <div v-if="IS_DEV_WHATSAPP" class="bg-slate-800 text-slate-300 p-3 rounded-md text-[0.72rem] mt-4 border border-slate-700">
@@ -25,5 +25,6 @@
 
 <script setup lang="ts">
 import { IS_DEV_WHATSAPP } from '../config'
+import { textoDelivery, textoSalaoDomingo, textoSalaoSemana } from '../domain/hours'
 </script>
 <!-- Fim de FooterBar.vue -->

@@ -45,7 +45,7 @@ const drinks = computed(() => itemsData.filter(i => i.cat === 'drink'))
         <HeaderBar />
         <HeroCarousel />
 
-        <main id="conteudo" class="max-w-[480px] mx-auto p-4">
+        <main id="conteudo" tabindex="-1" class="max-w-[480px] mx-auto p-4 outline-none">
           <!-- Combos Principais -->
           <h2 class="text-sm font-extrabold my-5 text-primary-dark uppercase border-l-4 border-primary pl-2.5">
             Combos de Churrasco

@@ -2,7 +2,6 @@
 import { initializeApp, type FirebaseApp } from "firebase/app"
 import { getFirestore, type Firestore } from "firebase/firestore"
 import { getAuth, type Auth } from "firebase/auth"
-import { getAnalytics, isSupported } from "firebase/analytics"
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -19,5 +18,5 @@ export const isFirebaseConfigured = Boolean(firebaseConfig.apiKey && firebaseCon
 const app: FirebaseApp | null = isFirebaseConfigured ? initializeApp(firebaseConfig) : null
 export const db: Firestore | null = app ? getFirestore(app) : null
 export const auth: Auth | null = app ? getAuth(app) : null
-export const analytics = app && firebaseConfig.measurementId ? isSupported().then((ok) => (ok ? getAnalytics(app) : null)) : Promise.resolve(null)
+/* O Analytics do Firebase não é ligado: usa cookies e não tinha aviso ao visitante. A medição é a do GoatCounter, sem cookie (decisão D5, src/services/medicao.ts) */
 /* Fim de firebase.ts */
