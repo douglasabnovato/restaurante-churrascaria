@@ -1,12 +1,12 @@
 # MVP — Sabor & Churrasco
 
-> Fonte única do estado. Criado em 31/10/2026; revisto em 16/11/2026 (ciclo de 16/11, `feature/2026-11-16` → `developer/sprint-2026-11-19`). As tabelas anteriores estão em [Histórico](#histórico).
+> Fonte única do estado. Criado em 31/10/2026; revisto em 16/11/2026 (ciclo de 16/11, `feature/2026-11-16` → `developer/sprint-2026-11-19`; às 12:00, critério 9 com os alertas do Dependabot ligados, PR #36). As tabelas anteriores estão em [Histórico](#histórico).
 
 **Nível:** Vitrine (N2). Valem os 12 critérios.
 
 **Resumo:** 7 de 12 aplicáveis atendidos
 
-**Finalizado:** sim — faltam 3, 5, 7, 9 e 10, e cada um depende do responsável, com issue `depende-do-responsavel`: publicar a versão atual pelo Actions (#2: 3, 7 e 10), criar a conta do GoatCounter (#12: 5) e ligar os alertas do Dependabot (#29: 9; regra em decisão na engenharia#33).
+**Finalizado:** não — faltam 3, 5, 7, 9 e 10. Os 3, 5, 7 e 10 dependem do responsável, com issue `depende-do-responsavel`: publicar a versão atual pelo Actions (#2: 3, 7 e 10) e criar a conta do GoatCounter (#12: 5). O 9 não: com os alertas do Dependabot ligados em 16/11/2026, 4 dos 15 seguem sem correção nem decisão escrita (#35). Antes desta revisão: sim, porque o 9 dependia só de ligar os alertas (#29).
 
 **Conteúdo do restaurante:** ilustrativo até o responsável decidir se o cliente é real (#30). Endereço, horário, preços e telefone não foram criados nem mudados neste ciclo.
 
@@ -30,7 +30,7 @@ Neste ciclo: o teste "escuro" saiu (o app não tem tema escuro próprio, nenhum 
 | 6 | Falhas tratadas | Atende | `E2E_PORT=4301 npx playwright test`, 16/11/2026, celular e desktop: o build roda sem Firebase, e o pedido segue pelo WhatsApp com código provisório (falha do registro tratada); "mesa vazia mostra o erro sem fechar o diálogo"; "às 20h o delivery fica fechado, com aviso lido por leitor de tela"; carrinho vazio deixa o "Avançar" desativado; espera: com o módulo de registro atrasado, o botão mostra "Enviando…" e fica desativado até a confirmação. `npx vitest run`, 16/11/2026: código provisório e horários em `tests/unit/`. O critério vale para o fluxo principal (pedido). Carregamento, vazio e erro do painel da equipe estão no código, sem teste no navegador (#31) | #31 |
 | 7 | Desempenho aceitável | Parcial | Só medição local: Lighthouse 12.8.2 móvel em 09/11/2026, 2,56 / 2,44 / 2,49 s, mediana 2,49 s; elemento do LCP: a 1ª imagem do carrossel. No ar está o build antigo (6,04 s em 02/11/2026). Medir no site depende da publicação | #2, #9, #23 |
 | 8 | Acessibilidade básica | Atende | `E2E_PORT=4301 npx playwright test`, 16/11/2026: 10 de 10, no celular (Pixel 7) e no desktop (1280 px). Pedido só com Tab, Enter e setas; foco preso no diálogo; Esc devolve o foco; axe (WCAG 2.1 A e AA) sem violação séria ou crítica no cardápio inteiro, com os dados reais de `src/data/menu.ts`, no checkout e na confirmação. No CI, [run 43823325623](https://github.com/douglasabnovato/restaurante-churrascaria/actions/runs/43823325623) do PR #33, 16/11/2026: Playwright 10 passed. O app não tem tema escuro próprio, então não há teste no escuro | — |
-| 9 | Segurança e conformidade | Parcial | Alertas do Dependabot desligados: `gh api "repos/douglasabnovato/restaurante-churrascaria/dependabot/alerts?state=open&per_page=100"`, 16/11/2026: HTTP 403. Pela regra em decisão (engenharia#33), fica Parcial. `npm audit --omit=dev`, 16/11/2026: 4 altas no `@grpc/grpc-js` 1.9.16 dentro do `@firebase/firestore` 4.17.2, sem correção no pacote; `grep -l "grpc-js" dist/assets/*.js`, 16/11/2026: nenhum arquivo (o navegador não carrega o pacote). Regras do Firestore publicadas em 01/11/2026; medição sem cookie, com aviso | #29 (responsável), #27 |
+| 9 | Segurança e conformidade | Parcial | `gh api "repos/douglasabnovato/restaurante-churrascaria/dependabot/alerts?state=open&per_page=100"`, 16/11/2026, 12:00: 15 alertas abertos (3 altos, 7 médios, 5 baixos). 11 alertas corrigidos na sprint-19 (PR #36); fecham com o merge na principal; 4 restam (#35): `@grpc/grpc-js` (2, runtime, preso ao Firestore), `deepmerge` (sem correção) e `minimatch` (só na versão maior). `npm audit --omit=dev`, 16/11/2026: 4 altas no `@grpc/grpc-js` 1.9.16 dentro do `@firebase/firestore` 4.17.2, sem correção no pacote; `grep -l "grpc-js" dist/assets/*.js`, 16/11/2026: nenhum arquivo (o navegador não carrega o pacote). Regras do Firestore publicadas em 01/11/2026; medição sem cookie, com aviso | #35, #27 |
 | 10 | Entrega confiável | Parcial | `gh api repos/douglasabnovato/restaurante-churrascaria/rulesets/26932556`, 16/11/2026: ruleset `principal-protegida` ativo, com PR obrigatório, sem force push nem exclusão e check `web` exigido. Falta: o site no ar sai da pasta `docs/` (`gh api .../pages`, 16/11/2026: fonte `main:/docs`), sem passar pelo CI | #2 (responsável) |
 | 11 | Testes dos fluxos críticos | Atende | No job `web` do CI, [run 43823325623](https://github.com/douglasabnovato/restaurante-churrascaria/actions/runs/43823325623) do PR #33, 16/11/2026, sem `skip`: `npm test` (Vitest, 16 testes: pedido, horários e medição), `npm run test:rules` (5 testes das regras no emulador) e `npm run test:e2e` (10 execuções: 5 testes × 2 projetos), todos aprovados. Local, 16/11/2026: Vitest 16 de 16 e Playwright 10 de 10 | — |
 | 12 | Documentação honesta | Atende | README diz que o site no ar é o build antigo e aponta o `documentacao/DEPLOY.md` com o estado de 16/11/2026 | — |
@@ -61,6 +61,10 @@ Neste ciclo: o teste "escuro" saiu (o app não tem tema escuro próprio, nenhum 
 Pagamento online, integração com caixa e novos recursos antes de publicar a versão atual. A lista é uma proposta e pode mudar com a decisão do responsável.
 
 ## Histórico
+
+### Revisão de 16/11/2026, 12:00 (alertas do Dependabot)
+
+Só o critério 9 mudou de motivo: antes, Parcial com os alertas desligados (403, #29 do responsável); agora, Parcial com 4 alertas sem correção nem decisão (#35) e 11 corrigidos só na sprint (PR #36). **Resumo:** segue 7 de 12. **Finalizado:** sim → não.
 
 ### Estado de 10/11/2026 (ciclo da faixa de 90%)
 
