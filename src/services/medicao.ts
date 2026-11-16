@@ -4,6 +4,11 @@
 export const ENDERECO_MEDICAO = 'https://douglasabnovato.goatcounter.com/count'
 export const SCRIPT_MEDICAO = 'https://gc.zgo.at/count.js'
 
+/* Aviso de coleta mostrado no rodapé (#12): diz o que a medição conta e o que ela não guarda (LGPD, art. 6º, VI, e art. 9º) */
+export const AVISO_MEDICAO =
+  'Quando ativa no site publicado, a medição conta visitas e pedidos enviados com o GoatCounter, sem cookie. A contagem não guarda nome, endereço, telefone nem itens do pedido.'
+export const POLITICA_MEDICAO = 'https://www.goatcounter.com/help/privacy'
+
 type Contador = { count?: (dados: { path: string; title?: string; event?: boolean }) => void }
 type Janela = { goatcounter?: Contador }
 

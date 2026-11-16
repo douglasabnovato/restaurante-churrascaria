@@ -1,6 +1,6 @@
 /* Medição (D5): o GoatCounter não carrega no dev nem nos testes, e o evento só sai com o site em produção */
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { ENDERECO_MEDICAO, carregarMedicao, medicaoAtiva, registrarEvento, reiniciarMedicao } from '../../src/services/medicao'
+import { AVISO_MEDICAO, ENDERECO_MEDICAO, POLITICA_MEDICAO, carregarMedicao, medicaoAtiva, registrarEvento, reiniciarMedicao } from '../../src/services/medicao'
 
 /* Documento mínimo, sem jsdom: guarda os scripts inseridos no head */
 function documentoFalso() {
@@ -48,6 +48,13 @@ describe('medição de uso', () => {
     carregarMedicao(true, 'douglasabnovato.github.io', documentoFalso().doc)
     registrarEvento('enviar-pedido', janela)
     expect(count).toHaveBeenCalledWith({ path: 'enviar-pedido', title: 'enviar-pedido', event: true })
+  })
+
+  it('o aviso de coleta diz a ferramenta, que não há cookie e o que não é guardado (#12)', () => {
+    expect(AVISO_MEDICAO).toContain('GoatCounter')
+    expect(AVISO_MEDICAO).toContain('sem cookie')
+    for (const dado of ['nome', 'endereço', 'telefone', 'itens do pedido']) expect(AVISO_MEDICAO).toContain(dado)
+    expect(POLITICA_MEDICAO).toMatch(/^https:\/\/www\.goatcounter\.com\//)
   })
 })
 /* Fim de medicao.test.ts */
