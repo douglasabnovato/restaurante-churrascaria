@@ -4,19 +4,27 @@
 
 ---
 
-## Estado e próximos passos (ciclo de 10/11/2026)
+## Estado e próximos passos (ciclo de 16/11/2026)
 
-Nível: Vitrine (N2). **7 de 12** critérios do MVP atendidos; **finalizado** do lado do código (o que falta depende do responsável, com issue). A `main` só recebe PR com o job `web` do CI verde. O site no ar (https://douglasabnovato.github.io/restaurante-churrascaria/, HTTP 200 em 10/11/2026) ainda é o build antigo da pasta `docs/`: a publicação pelo Actions espera a troca da fonte do Pages (#2).
+Nível: Vitrine (N2). **7 de 12** critérios do MVP atendidos; **finalizado** do lado do código (o que falta depende do responsável, com issue). A `main` só recebe PR com o job `web` do CI verde (ruleset `principal-protegida`). O site no ar (https://douglasabnovato.github.io/restaurante-churrascaria/, HTTP 200 em 16/11/2026) ainda é o build antigo da pasta `docs/`: a publicação pelo Actions espera a troca da fonte do Pages (#2).
 
-**O que foi feito no ciclo de 10/11/2026**
+O conteúdo do restaurante (endereço, horário, preços) é tratado como ilustrativo até o responsável dizer se o cliente é real ([#30](https://github.com/douglasabnovato/restaurante-churrascaria/issues/30)).
+
+**O que foi feito no ciclo de 16/11/2026** (PR feature → `developer/sprint-2026-11-19`)
+- Aviso de coleta da medição no rodapé: o que o GoatCounter conta, sem cookie, e o que não guarda (#12).
+- Playwright no celular (Pixel 7) e no desktop (1280 px), com axe no cardápio inteiro e teste do delivery fechado às 20h. O teste "escuro" saiu: o app não tem tema escuro próprio.
+- `firebase` 12.19.0, `vue` 3.5.45 e `tailwindcss` 4.3.5.
+- `documentacao/MVP.md`: critério 9 "Parcial" com os alertas do Dependabot desligados (#29).
+
+**Ciclo de 10/11/2026** (PR #28)
 - Medição de uso sem cookie (GoatCounter, código `douglasabnovato`): só no site publicado, com o evento `enviar-pedido`, sem endereço nem telefone. Falta a conta (#12).
 - O Analytics do Firebase deixou de ser ligado: usava cookies e não avisava o visitante.
 - Meta da hipótese decidida no ciclo (revisável, #16).
 
-**Ciclo de 09/11/2026**
+**Ciclo de 09/11/2026** (PR #24)
 - O checkout prende o foco, devolve o foco ao fechar e leva à confirmação; o pedido fecha só com teclado, com teste no CI (#19). LCP local no build atual: mediana de 2,49 s.
 
-**Ciclo de 07/11/2026**
+**Ciclo de 07/11/2026** (PR #20)
 - Horários num só lugar ([`src/domain/hours.ts`](src/domain/hours.ts)), no fuso de Juiz de Fora; fora do horário (11h às 15h), o delivery fica indisponível no checkout, com aviso lido por leitor de tela (#14).
 - Ícones PNG de 192 e 512 px da marca (um maskable) no manifesto do PWA (#15).
 - `documentacao/MVP.md` com uma tabela só e histórico; plano do ciclo em `documentacao/PLANO-DE-ACAO.md`.
@@ -24,20 +32,24 @@ Nível: Vitrine (N2). **7 de 12** critérios do MVP atendidos; **finalizado** do
 **Ciclo de 03/11/2026:** CI nos PRs, `.env` fora do Git, carrossel mais leve, trava do deploy e observação no pedido (#10, #1).
 
 **O que queremos fazer**
-- [#21](https://github.com/douglasabnovato/restaurante-churrascaria/issues/21) Mesclar a sprint na `main` pelo PR #22 (responsável).
 - [#2](https://github.com/douglasabnovato/restaurante-churrascaria/issues/2) Publicar a versão atual do site (responsável).
 - [#12](https://github.com/douglasabnovato/restaurante-churrascaria/issues/12) Criar a conta do GoatCounter (responsável).
+- [#29](https://github.com/douglasabnovato/restaurante-churrascaria/issues/29) Ligar os alertas do Dependabot (responsável).
+- [#30](https://github.com/douglasabnovato/restaurante-churrascaria/issues/30) Decidir se o restaurante é cliente real ou exemplo ilustrativo (responsável).
 - [#16](https://github.com/douglasabnovato/restaurante-churrascaria/issues/16) Confirmar a meta da hipótese (responsável).
+- [#21](https://github.com/douglasabnovato/restaurante-churrascaria/issues/21) e [#11](https://github.com/douglasabnovato/restaurante-churrascaria/issues/11) Conferir e fechar (responsável): ciclos já mesclados e `main` protegida.
 - [#9](https://github.com/douglasabnovato/restaurante-churrascaria/issues/9) Medir e reduzir o LCP móvel no site publicado (depois da #2).
+- [#31](https://github.com/douglasabnovato/restaurante-churrascaria/issues/31) Testar o painel da equipe no navegador com os emuladores.
 - [#13](https://github.com/douglasabnovato/restaurante-churrascaria/issues/13) Mostrar a observação do pedido no painel.
 - [#18](https://github.com/douglasabnovato/restaurante-churrascaria/issues/18) Fechar o delivery em feriados e dias de exceção.
 - [#23](https://github.com/douglasabnovato/restaurante-churrascaria/issues/23) Servir a primeira imagem do carrossel pelo próprio site.
 - [#26](https://github.com/douglasabnovato/restaurante-churrascaria/issues/26) Validar com uma pessoa de fora.
 - [#27](https://github.com/douglasabnovato/restaurante-churrascaria/issues/27) Acompanhar o alerta do `@grpc/grpc-js` no Firebase.
+- [#32](https://github.com/douglasabnovato/restaurante-churrascaria/issues/32) Atualizar as dependências de desenvolvimento com versão maior.
 
 **Onde está a documentação**
 - Estado e critérios: [documentacao/MVP.md](documentacao/MVP.md).
-- Plano do ciclo: [documentacao/PLANO-DE-ACAO.md](documentacao/PLANO-DE-ACAO.md), seção "Ciclo de 09/11/2026".
+- Plano do ciclo: [documentacao/PLANO-DE-ACAO.md](documentacao/PLANO-DE-ACAO.md), seção "Ciclo de 16/11/2026".
 - Publicação: [documentacao/DEPLOY.md](documentacao/DEPLOY.md).
 
 ---
@@ -60,6 +72,8 @@ As regras do Firestore já estão publicadas (01/11/2026). Falta publicar a vers
 5. Em [Settings → Pages](https://github.com/douglasabnovato/restaurante-churrascaria/settings/pages), trocar **Source** para **GitHub Actions**.
 6. Criar a variável `PAGES_VIA_ACTIONS` com o valor `true`.
 
+Também do responsável: ligar os alertas do Dependabot (#29) e dizer se o cliente é real (#30).
+
 Depois disso, rodar o workflow CI na `main` (Actions → CI → Run workflow) e conferir que o painel pede login. O PR #1 já foi integrado: antes do `git pull` no clone local, guardar uma cópia do `.env`, porque o merge o apaga da pasta. Detalhes em [documentacao/DEPLOY.md](documentacao/DEPLOY.md).
 
 ---
@@ -73,7 +87,7 @@ Depois disso, rodar o workflow CI na `main` (Actions → CI → Run workflow) e 
 
 ### 🌐 Em produção
 
-- URL: https://douglasabnovato.github.io/restaurante-churrascaria/ (responde com HTTP 200 em 06/11/2026). **Atenção:** o que está no ar ainda é o build antigo da pasta `docs/`, sem o painel com login. A versão atual entra no ar quando o Pages passar a publicar pelo Actions ([#2](https://github.com/douglasabnovato/restaurante-churrascaria/issues/2)).
+- URL: https://douglasabnovato.github.io/restaurante-churrascaria/ (responde com HTTP 200 em 16/11/2026). **Atenção:** o que está no ar ainda é o build antigo da pasta `docs/`, sem o painel com login. A versão atual entra no ar quando o Pages passar a publicar pelo Actions ([#2](https://github.com/douglasabnovato/restaurante-churrascaria/issues/2)).
 - Hospedagem prevista: GitHub Pages publicado pelo GitHub Actions a cada push na `main` (variáveis `VITE_*` e `PAGES_VIA_ACTIONS=true` nas Variables do repositório) + Firebase (Auth e Firestore, plano Spark). As regras do Firestore já estão publicadas.
 - Passo a passo, incluindo a publicação das regras do Firestore: [documentacao/DEPLOY.md](documentacao/DEPLOY.md)
 
@@ -85,16 +99,16 @@ Abaixo estão alguns prints que ilustram o funcionamento do Sabor & Churrasco, c
 
 ### 🖥️ Visão Desktop
 <p align="center">
-  <img src="./.github/1-desktop-home.png" alt="Desktop Home" width="800px">
+  <img src="./.github/1-desktop-home.jpeg" alt="Desktop Home" width="800px">
 </p>
 
 ---
 
 ### 📱 Visão Mobile & Experiência do Cliente
 <p align="center">
-  <img src="./.github/2-mobile-home.png" alt="Mobile Home" width="280px">
+  <img src="./.github/2-mobile-home.jpeg" alt="Mobile Home" width="280px">
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="./.github/3-mobile-banner.png" alt="Mobile Banner" width="280px">
+  <img src="./.github/3-mobile-banner.jpeg" alt="Mobile Banner" width="280px">
 </p>
 
 ---
@@ -107,8 +121,8 @@ Abaixo estão alguns prints que ilustram o funcionamento do Sabor & Churrasco, c
       <td align="center"><b>Dashboard de Pedidos (Tempo Real)</b></td>
     </tr>
     <tr>
-      <td><img src="./.github/4-whatsapp-pedido.png" alt="WhatsApp Pedido" width="350px"></td>
-      <td><img src="./.github/5-dashboard.png" alt="Dashboard" width="450px"></td>
+      <td><img src="./.github/4-whatsapp-pedido.jpeg" alt="WhatsApp Pedido" width="350px"></td>
+      <td><img src="./.github/5-dashboard.jpeg" alt="Dashboard" width="450px"></td>
     </tr>
   </table>
 </div>
@@ -177,7 +191,7 @@ Abaixo estão alguns prints que ilustram o funcionamento do Sabor & Churrasco, c
 - [x] Validação de mesa/endereço, totais em centavos, código provisório único quando o contador falha
 - [x] WCAG AA (axe-core sem violações, Lighthouse Acessibilidade 100); carrossel com pausa
 - [x] Firebase carregado só ao enviar o pedido ou abrir o painel: JS inicial de 576 kB para 87 kB
-- [x] Testes: `npm test` (regras do pedido) e `npm run test:rules` (regras do Firestore no emulador)
+- [x] Testes: `npm test` (regras do pedido), `npm run test:rules` (regras do Firestore no emulador, precisa de Java 11+) e `npm run test:e2e` (Playwright com axe, no celular e no desktop; o `@axe-core/playwright` 4.14 pede Node 22.12 ou mais novo)
 
 #### Como configurar o painel
 
