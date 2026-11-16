@@ -108,6 +108,21 @@ test('envia o pedido de mesa usando só o teclado', async ({ page }) => {
   await expect(page.locator('#conteudo')).toBeFocused()
 })
 
+test('cardápio inteiro sem violação grave do axe e com o aviso de coleta no rodapé (#12)', async ({ page }) => {
+  await page.goto('./')
+  await expect(page.getByRole('heading', { name: 'Sabor & Churrasco' })).toBeVisible()
+  // Dados reais do cardápio (src/data/menu.ts): todos os produtos aparecem antes do axe
+  await expect(page.getByRole('button', { name: /^Adicionar 1 / }).first()).toBeVisible()
+  const aviso = page.getByTestId('aviso-medicao')
+  await aviso.scrollIntoViewIfNeeded()
+  await expect(aviso).toBeVisible()
+  await expect(aviso).toContainText('sem cookie')
+  await expect(aviso.getByRole('link', { name: 'Política do GoatCounter' })).toHaveAttribute('href', 'https://www.goatcounter.com/help/privacy')
+  expect(await violacoesGraves(page, 'body')).toEqual([])
+  // Sem rolagem horizontal na largura do projeto
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0)
+})
+
 test('mesa vazia mostra o erro sem fechar o diálogo', async ({ page }) => {
   await page.goto('./')
   await tabAte(page, /^Adicionar 1 /)
