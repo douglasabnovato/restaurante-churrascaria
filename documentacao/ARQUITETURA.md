@@ -36,3 +36,4 @@ flowchart TB
 | ADR-03 | Firebase importado sob demanda | Cardápio abre rápido no 4G | Import estático |
 | ADR-04 | WhatsApp continua sendo o canal principal | Pedido não se perde se o Firestore falhar | Só Firestore |
 | ADR-05 | Documentação do ciclo em `documentacao/` | `docs/` é o build do GitHub Pages | — |
+| [ADR-06](adr/0006-aceitar-alertas-de-desenvolvimento.md) | Aceitar os alertas do Dependabot que não chegam ao navegador (`@grpc/grpc-js`, `minimatch`, `deepmerge`) | Ordem do responsável de 16/11/2026; 0 ocorrências no `dist/` | `overrides` contra o pino do Firestore; tirar o PWA |
