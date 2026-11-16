@@ -6,9 +6,12 @@
 
 ## Estado e próximos passos (ciclo de 16/11/2026)
 
-Nível: Vitrine (N2). **7 de 12** critérios do MVP atendidos; **finalizado** do lado do código (o que falta depende do responsável, com issue). A `main` só recebe PR com o job `web` do CI verde (ruleset `principal-protegida`). O site no ar (https://douglasabnovato.github.io/restaurante-churrascaria/, HTTP 200 em 16/11/2026) ainda é o build antigo da pasta `docs/`: a publicação pelo Actions espera a troca da fonte do Pages (#2).
+Nível: Vitrine (N2). **8 de 12** critérios do MVP atendidos; **finalizado**: os que faltam (3, 5, 7 e 10) dependem do responsável, com issue. Os alertas do Dependabot estão todos decididos: 11 corrigidos na sprint-19 e 4 aceitos na [ADR-06](documentacao/adr/0006-aceitar-alertas-de-desenvolvimento.md), porque não chegam ao navegador. A `main` só recebe PR com o job `web` do CI verde (ruleset `principal-protegida`). O site no ar (https://douglasabnovato.github.io/restaurante-churrascaria/, HTTP 200 em 16/11/2026) ainda é o build antigo da pasta `docs/`: a publicação pelo Actions espera a troca da fonte do Pages (#2).
 
 O conteúdo do restaurante (endereço, horário, preços) é tratado como ilustrativo até o responsável dizer se o cliente é real ([#30](https://github.com/douglasabnovato/restaurante-churrascaria/issues/30)).
+
+**Alertas do Dependabot, 16/11/2026** ([PR #36](https://github.com/douglasabnovato/restaurante-churrascaria/pull/36))
+- Alertas ligados pelo responsável: 15 abertos às 12:00; 11 corrigidos só no `package-lock.json`, sem versão maior; os 4 que restam (`@grpc/grpc-js`, `minimatch` e `deepmerge`, fora do bundle do navegador) estão aceitos na [ADR-06](documentacao/adr/0006-aceitar-alertas-de-desenvolvimento.md), por ordem do responsável às 15:06 ([#35](https://github.com/douglasabnovato/restaurante-churrascaria/issues/35)).
 
 **O que foi feito no ciclo de 16/11/2026** (PR feature → `developer/sprint-2026-11-19`)
 - Aviso de coleta da medição no rodapé: o que o GoatCounter conta, sem cookie, e o que não guarda (#12).
@@ -34,7 +37,7 @@ O conteúdo do restaurante (endereço, horário, preços) é tratado como ilustr
 **O que queremos fazer**
 - [#2](https://github.com/douglasabnovato/restaurante-churrascaria/issues/2) Publicar a versão atual do site (responsável).
 - [#12](https://github.com/douglasabnovato/restaurante-churrascaria/issues/12) Criar a conta do GoatCounter (responsável).
-- [#29](https://github.com/douglasabnovato/restaurante-churrascaria/issues/29) Ligar os alertas do Dependabot (responsável).
+- [#29](https://github.com/douglasabnovato/restaurante-churrascaria/issues/29) Ligar os alertas do Dependabot (feito pelo responsável em 16/11/2026; evidência comentada na issue).
 - [#30](https://github.com/douglasabnovato/restaurante-churrascaria/issues/30) Decidir se o restaurante é cliente real ou exemplo ilustrativo (responsável).
 - [#16](https://github.com/douglasabnovato/restaurante-churrascaria/issues/16) Confirmar a meta da hipótese (responsável).
 - [#21](https://github.com/douglasabnovato/restaurante-churrascaria/issues/21) e [#11](https://github.com/douglasabnovato/restaurante-churrascaria/issues/11) Conferir e fechar (responsável): ciclos já mesclados e `main` protegida.
@@ -72,7 +75,7 @@ As regras do Firestore já estão publicadas (01/11/2026). Falta publicar a vers
 5. Em [Settings → Pages](https://github.com/douglasabnovato/restaurante-churrascaria/settings/pages), trocar **Source** para **GitHub Actions**.
 6. Criar a variável `PAGES_VIA_ACTIONS` com o valor `true`.
 
-Também do responsável: ligar os alertas do Dependabot (#29) e dizer se o cliente é real (#30).
+Também do responsável: fechar a #29 (alertas ligados em 16/11/2026), e dizer se o cliente é real (#30).
 
 Depois disso, rodar o workflow CI na `main` (Actions → CI → Run workflow) e conferir que o painel pede login. O PR #1 já foi integrado: antes do `git pull` no clone local, guardar uma cópia do `.env`, porque o merge o apaga da pasta. Detalhes em [documentacao/DEPLOY.md](documentacao/DEPLOY.md).
 
