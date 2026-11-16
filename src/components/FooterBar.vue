@@ -1,4 +1,4 @@
-<!-- Rodapé com endereço e horários; o aviso de WhatsApp de desenvolvimento só aparece sem VITE_WHATSAPP_NUMBER -->
+<!-- Rodapé com endereço, horários e o aviso de coleta da medição de uso (#12, LGPD art. 9º); o aviso de WhatsApp de desenvolvimento só aparece sem VITE_WHATSAPP_NUMBER -->
 <template>
   <footer class="bg-dark text-slate-200 p-7 px-5 mt-10 text-xs border-t-4 border-primary">
     <div class="text-sm font-extrabold text-accent mb-3 uppercase">Sabor & Churrasco</div>
@@ -16,6 +16,11 @@
       • Delivery: {{ textoDelivery() }}
     </div>
 
+    <section aria-labelledby="aviso-medicao-titulo" data-testid="aviso-medicao" class="mb-4 leading-relaxed">
+      <h2 id="aviso-medicao-titulo" class="font-bold text-white uppercase text-[0.75rem] mb-1 tracking-wider">Privacidade</h2>
+      <p>{{ AVISO_MEDICAO }} <a :href="POLITICA_MEDICAO" class="underline text-white" rel="noopener noreferrer" target="_blank">Política do GoatCounter (abre em nova aba)</a></p>
+    </section>
+
     <div v-if="IS_DEV_WHATSAPP" class="bg-slate-800 text-slate-300 p-3 rounded-md text-[0.72rem] mt-4 border border-slate-700">
       🛠️ <b>Ambiente de Desenvolvimento</b><br>
       Pedidos direcionados para o WhatsApp Dev: <b>(32) 98836-7667</b>
@@ -26,5 +31,6 @@
 <script setup lang="ts">
 import { IS_DEV_WHATSAPP } from '../config'
 import { textoDelivery, textoSalaoDomingo, textoSalaoSemana } from '../domain/hours'
+import { AVISO_MEDICAO, POLITICA_MEDICAO } from '../services/medicao'
 </script>
 <!-- Fim de FooterBar.vue -->

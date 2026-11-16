@@ -184,3 +184,56 @@ Timebox: 50 min.
 **Vira issue ou segue em issue.** #23 (imagem do carrossel no site); #2, #11, #12, #16 e #21 (responsável); #9, #13 e #18 seguem. #19 recebe a evidência por comentário e fecha depois do merge na `main`.
 
 **Revisão independente (09/11/2026).** Um subagente que não viu o código leu só o diff e esta seção. Corrigido: relógio fixo no teste (terça, 12h, horário de Brasília), para não depender da hora do CI; conferência de `*Mesa:* 4` na mensagem do WhatsApp em vez de só "4"; teste da mesa vazia confere o tipo "mesa" e o texto exato do erro; a armadilha de foco ignora elementos ocultos; foco no `body` ao abrir (toque no Safari) cai no `#conteudo` ao fechar; o Playwright não reaproveita servidor já aberto na porta. Nenhum caminho para gravar pedido real foi apontado.
+
+## Ciclo de 16/11/2026
+
+> A sprint de 12/11 entrou na `main` pelo PR #22 em 16/11/2026. Branch `developer/sprint-2026-11-19` criada a partir da `main`, e `feature/2026-11-16` a partir dela. Nível: Vitrine (N2), 12 critérios. Pages, Variables e Settings não foram tocados (#2).
+
+### Produto
+
+**Problema e público.** Sem mudança: clientes pedem pelo celular, e a equipe acompanha num painel. O conteúdo do restaurante (endereço, horário, preços) é tratado como ilustrativo até o responsável dizer se o cliente é real (#30). Nada desse conteúdo muda neste ciclo.
+
+**Hipótese.** A de 10/11/2026 (decisão D1, #16): metade dos pedidos do delivery pelo cardápio digital em um mês. Saberemos quando o GoatCounter (evento `enviar-pedido`) mostrar esse número contra o total de pedidos que a equipe registra.
+
+**O que a pesquisa trouxe.**
+
+| Ideia | O que levamos para o projeto | Fonte |
+|---|---|---|
+| A LGPD pede informação clara, precisa e fácil de achar sobre o tratamento e a finalidade (art. 6º, VI, e art. 9º) | Aviso de coleta no rodapé: o que a medição conta, sem cookie, e o que ela não guarda, com link para a política do GoatCounter (#12) | [Lei 13.709/2018](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm) |
+| O GoatCounter não guarda IP nem User-Agent e diz que o aviso é opcional, mas recomendável | O aviso entra mesmo sem cookie, como pediu a coordenação em 16/11/2026 | [GoatCounter: GDPR](https://www.goatcounter.com/help/gdpr), [GoatCounter: privacy](https://www.goatcounter.com/help/privacy) |
+| O Playwright emula o `colorScheme`, mas isso só muda a página se o CSS tiver `prefers-color-scheme`; a largura vem do `viewport` | O projeto "escuro" repetia a tela clara (o app não tem tema escuro). Ele virou o projeto "desktop" (1280 px), com axe no cardápio inteiro | [Playwright: emulation](https://playwright.dev/docs/emulation) |
+
+**Backlog priorizado (impacto × esforço).**
+
+| Prioridade | Item | Impacto | Esforço | Destino |
+|---|---|---|---|---|
+| 1 | Critério 9 honesto: Dependabot desligado (403) | Alto | Baixo | Este ciclo (MVP) e responsável (#29) |
+| 2 | Tirar o teste de tema escuro falso; axe no cardápio inteiro, no celular e no desktop | Médio | Baixo | Este ciclo |
+| 3 | Aviso de coleta da medição no rodapé | Médio | Baixo | Este ciclo (#12) |
+| 4 | Patch e minor das dependências de produção | Médio | Baixo | Este ciclo |
+| 5 | Painel da equipe testado no navegador com emuladores | Médio | Médio | Issue (#31) |
+| 6 | Versões maiores das dependências de desenvolvimento | Baixo | Médio | Issue (#32) |
+
+**Fora do escopo.** Mudar preço, endereço, telefone ou horário (#30); feriados (#18); observação no painel (#13); imagem do carrossel (#23).
+
+### Engenharia
+
+**Arquitetura.** O texto do aviso fica em `src/services/medicao.ts` (`AVISO_MEDICAO`), junto da medição, e o `FooterBar.vue` o mostra numa seção "Privacidade". O Playwright roda os mesmos testes em dois projetos: `celular` (Pixel 7) e `desktop` (Chrome, 1280 × 800). Testes novos: axe no `body` do cardápio, com o aviso e sem rolagem horizontal; delivery fechado às 20h; e a espera do envio ("Enviando…"), com o módulo `orders-*.js` atrasado por `page.route`.
+
+**Riscos.**
+- O aviso fala da medição do site publicado, que só existe depois da #2 e da conta do GoatCounter (#12).
+- O `@grpc/grpc-js` 1.9.16 segue no `npm audit --omit=dev` (4 altas). Ele não entra no bundle do navegador: `grep -l "grpc-js" dist/assets/*.js`, 16/11/2026, sem resultado (só aparecem nomes de opção como `grpcFlowControlWindow`), mas o risco só fica decidido com os alertas ligados (#29) e a regra da engenharia#33.
+
+**Qualidade.** Vitest, regras do Firestore no emulador (só no CI: sem Java local), Playwright com axe, `vue-tsc` e build. O CI é a fonte da evidência.
+
+**Definição de pronto.** CI verde no PR para a sprint; `MVP.md`, README e este plano atualizados; revisão independente feita só com o diff; PR da sprint para a `main` aberto com `revisao-responsavel`.
+
+### Plano de ação
+
+**Este ciclo executa.**
+1. Patch e minor de `firebase`, `vue` e `tailwindcss`.
+2. Playwright sem projeto escuro falso; projeto desktop e axe no cardápio inteiro.
+3. Aviso de coleta no rodapé, com teste unitário e de ponta a ponta (#12).
+4. `MVP.md` com o critério 9 em "Parcial" pelo Dependabot desligado e o 8 sem "escuro".
+
+**Vira issue ou segue em issue.** Novas: #29 (alertas do Dependabot, responsável), #30 (cliente real ou ilustrativo, responsável), #31 (painel no navegador), #32 (versões maiores). Seguem: #2, #11, #12, #16 e #21 (responsável); #9, #13, #18, #23, #26 e #27.

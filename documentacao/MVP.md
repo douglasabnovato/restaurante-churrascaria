@@ -1,37 +1,39 @@
 # MVP — Sabor & Churrasco
 
-> Fonte única do estado. Criado em 31/10/2026; revisto em 10/11/2026 (ciclo da faixa de 90%, decisões D1 a D7 em `engenharia/decisoes/2026-11-10-ciclo-faixa-90.md`). As tabelas anteriores estão em [Histórico](#histórico).
+> Fonte única do estado. Criado em 31/10/2026; revisto em 16/11/2026 (ciclo de 16/11, `feature/2026-11-16` → `developer/sprint-2026-11-19`). As tabelas anteriores estão em [Histórico](#histórico).
 
 **Nível:** Vitrine (N2). Valem os 12 critérios.
 
 **Resumo:** 7 de 12 aplicáveis atendidos
 
-**Finalizado:** sim — faltam 3, 5, 7, 9 e 10, que dependem do responsável: publicar a versão atual e trocar a fonte do Pages (#2), criar a conta do GoatCounter (#12) e mesclar a sprint (#21)
+**Finalizado:** sim — faltam 3, 5, 7, 9 e 10, e cada um depende do responsável, com issue `depende-do-responsavel`: publicar a versão atual pelo Actions (#2: 3, 7 e 10), criar a conta do GoatCounter (#12: 5) e ligar os alertas do Dependabot (#29: 9; regra em decisão na engenharia#33).
 
-Tudo o que o código resolve está feito. Neste ciclo entrou a medição sem cookie (GoatCounter) com o evento `enviar-pedido`, e o Analytics do Firebase deixou de ser ligado (usava cookies sem aviso). A publicação pelo Actions já existe no CI, travada por `PAGES_VIA_ACTIONS`; o site no ar segue o build antigo da pasta `docs/` até a troca da fonte (#2).
+**Conteúdo do restaurante:** ilustrativo até o responsável decidir se o cliente é real (#30). Endereço, horário, preços e telefone não foram criados nem mudados neste ciclo.
+
+Neste ciclo: o teste "escuro" saiu (o app não tem tema escuro próprio, nenhum `prefers-color-scheme` no CSS) e deu lugar ao projeto desktop; o axe passou a cobrir o cardápio inteiro; o rodapé ganhou o aviso de coleta da medição (#12); `firebase`, `vue` e `tailwindcss` subiram patch e minor. O critério 9 passou a citar o Dependabot desligado.
 
 ## Problema e hipótese
 
 **Problema e público:** Clientes do restaurante pedem pelo celular, e a equipe acompanha os pedidos em um painel, sem erro de cálculo manual.
 
-**Hipótese (meta do ciclo, texto da proposta mantido):** Metade dos pedidos do delivery passa pelo cardápio digital em um mês, com menos pedidos corrigidos pela equipe. Meta decidida pelo coordenador em 10/11/2026 (decisão D1), revisável pelo responsável (#16). Saberemos pelo GoatCounter (evento `enviar-pedido`) comparado com o total de pedidos do delivery que a equipe registra.
+**Hipótese:** Acreditamos que o cardápio digital fará metade dos pedidos do delivery passar por ele em um mês, com menos pedidos corrigidos pela equipe. Saberemos quando o GoatCounter (evento `enviar-pedido`) mostrar, no mês, pelo menos metade do total de pedidos do delivery que a equipe registra. Meta decidida pelo coordenador em 10/11/2026 (decisão D1), revisável pelo responsável (#16).
 
 ## 1. Critérios
 
-| # | Critério | Situação em 10/11/2026 | Evidência ou o que falta | Issue |
+| # | Critério | Situação em 16/11/2026 | Evidência ou o que falta | Issue |
 |---|---|---|---|---|
 | 1 | Problema e público claros | Atende | Frase acima | — |
-| 2 | Hipótese a validar | Atende | Meta decidida pelo coordenador em 10/11/2026 (decisão D1), revisável pelo responsável: a hipótese acima | #16 |
-| 3 | Fluxo principal completo | Parcial | No build atual, `npx playwright test` (claro e escuro, Pixel 7), 10/11/2026: 4 de 4, do cardápio a "Pedido enviado!" só com teclado (também no CI, job `web`). No ar, o build antigo: `curl https://douglasabnovato.github.io/restaurante-churrascaria/`, 10/11/2026: `<title>sabor-e-churrasco</title>`, e o build atual tem `Sabor & Churrasco — cardápio e pedidos` | #2 (responsável); validação com pessoa de fora: #26 |
-| 4 | Escopo enxuto | Atende | Seção "Fora do MVP" (pagamento online, integração com caixa); feriados viraram issue (#18) | — |
-| 5 | Medição de uso | Parcial | Código pronto; falta a conta (decisão D5). GoatCounter sem cookie (`src/services/medicao.ts`), só no build de produção fora de localhost, com o evento `enviar-pedido` (sem endereço, telefone nem itens). `npx vitest run`, 10/11/2026: 15 de 15, incluindo `tests/unit/medicao.test.ts`; o Playwright confere que o script não carrega em localhost | #12 (responsável) |
-| 6 | Falhas tratadas | Atende | Painel com carregamento, vazio, erro e permissão; pedido com validação e falha tratada; delivery fora do horário avisa e fica indisponível (Playwright com relógio fixo, 09/11/2026) | — |
-| 7 | Desempenho aceitável | Parcial | No build atual, Lighthouse 12.8.2 móvel local em 09/11/2026: 2,56 / 2,44 / 2,49 s, mediana 2,49 s; elemento do LCP: a 1ª imagem do carrossel. No ar, 6,04 s na versão antiga (02/11/2026). Medir no site depende da publicação (D6) | #2, #9, #23 |
-| 8 | Acessibilidade básica | Atende | `npx playwright test`, 10/11/2026: 4 de 4 (claro e escuro), pedido só com Tab, Enter e setas, foco preso no diálogo, Esc devolve o foco; axe sem violação séria ou crítica no checkout e na confirmação. Lighthouse local: acessibilidade 1,00 (09/11/2026) | — |
-| 9 | Segurança e conformidade | Parcial | Regras do Firestore publicadas em 01/11/2026 (leitura sem login recusada); sem cookie de medição. Falta: o site publicado ainda mostra o Dashboard antigo (#2). `npm audit --omit=dev`, 10/11/2026: 4 altas no `@grpc/grpc-js` 1.9.16 dentro do `@firebase/firestore`, sem correção no pacote; uso no navegador a conferir (#27) | #2 (responsável), #27 |
-| 10 | Entrega confiável | Parcial | `gh api repos/douglasabnovato/restaurante-churrascaria/rules/branches/main`, 10/11/2026: `required_status_checks` (`web`), PR obrigatório, sem force push nem exclusão. O CI publica o `dist/` pelo Actions quando `PAGES_VIA_ACTIONS=true`. Falta: o site ainda sai da pasta `docs/`, sem passar pelo CI | #2 (responsável) |
-| 11 | Testes dos fluxos críticos | Atende | `npx vitest run` (15 testes: pedido, horários e medição), regras do Firestore no emulador e `npm run test:e2e` (4 de 4), no CI, sem `skip` | — |
-| 12 | Documentação honesta | Atende | README diz que o site no ar é o build antigo e como trocar a fonte do Pages | — |
+| 2 | Hipótese a validar | Atende | Hipótese acima, com meta e "saberemos quando" (decisão D1 de 10/11/2026, revisável) | #16 |
+| 3 | Fluxo principal completo | Parcial | No build atual, `E2E_PORT=4301 npx playwright test`, 16/11/2026: 10 de 10 (5 testes × celular Pixel 7 e desktop 1280 px), do cardápio a "Pedido enviado!" só com teclado; também no job `web` do CI. No ar, o build antigo: `curl -s https://douglasabnovato.github.io/restaurante-churrascaria/`, 16/11/2026: HTTP 200 com `<title>sabor-e-churrasco</title>` (o build atual tem `Sabor & Churrasco — cardápio e pedidos`) | #2 (responsável); pessoa de fora: #26 |
+| 4 | Escopo enxuto | Atende | Seção "Fora do MVP" (pagamento online, integração com caixa); feriados em issue (#18) | — |
+| 5 | Medição de uso | Parcial | Código pronto e aviso de coleta no rodapé (16/11/2026). GoatCounter sem cookie (`src/services/medicao.ts`), só no build de produção fora de localhost, com o evento `enviar-pedido`. `npx vitest run`, 16/11/2026: 16 de 16, incluindo o teste do aviso. Falta a conta e o painel com visitas | #12 (responsável) |
+| 6 | Falhas tratadas | Atende | `E2E_PORT=4301 npx playwright test`, 16/11/2026, celular e desktop: o build roda sem Firebase, e o pedido segue pelo WhatsApp com código provisório (falha do registro tratada); "mesa vazia mostra o erro sem fechar o diálogo"; "às 20h o delivery fica fechado, com aviso lido por leitor de tela"; carrinho vazio deixa o "Avançar" desativado; espera: com o módulo de registro atrasado, o botão mostra "Enviando…" e fica desativado até a confirmação. `npx vitest run`, 16/11/2026: código provisório e horários em `tests/unit/`. O critério vale para o fluxo principal (pedido). Carregamento, vazio e erro do painel da equipe estão no código, sem teste no navegador (#31) | #31 |
+| 7 | Desempenho aceitável | Parcial | Só medição local: Lighthouse 12.8.2 móvel em 09/11/2026, 2,56 / 2,44 / 2,49 s, mediana 2,49 s; elemento do LCP: a 1ª imagem do carrossel. No ar está o build antigo (6,04 s em 02/11/2026). Medir no site depende da publicação | #2, #9, #23 |
+| 8 | Acessibilidade básica | Atende | `E2E_PORT=4301 npx playwright test`, 16/11/2026: 10 de 10, no celular (Pixel 7) e no desktop (1280 px). Pedido só com Tab, Enter e setas; foco preso no diálogo; Esc devolve o foco; axe (WCAG 2.1 A e AA) sem violação séria ou crítica no cardápio inteiro, com os dados reais de `src/data/menu.ts`, no checkout e na confirmação. No CI, [run 43823325623](https://github.com/douglasabnovato/restaurante-churrascaria/actions/runs/43823325623) do PR #33, 16/11/2026: Playwright 10 passed. O app não tem tema escuro próprio, então não há teste no escuro | — |
+| 9 | Segurança e conformidade | Parcial | Alertas do Dependabot desligados: `gh api "repos/douglasabnovato/restaurante-churrascaria/dependabot/alerts?state=open&per_page=100"`, 16/11/2026: HTTP 403. Pela regra em decisão (engenharia#33), fica Parcial. `npm audit --omit=dev`, 16/11/2026: 4 altas no `@grpc/grpc-js` 1.9.16 dentro do `@firebase/firestore` 4.17.2, sem correção no pacote; `grep -l "grpc-js" dist/assets/*.js`, 16/11/2026: nenhum arquivo (o navegador não carrega o pacote). Regras do Firestore publicadas em 01/11/2026; medição sem cookie, com aviso | #29 (responsável), #27 |
+| 10 | Entrega confiável | Parcial | `gh api repos/douglasabnovato/restaurante-churrascaria/rulesets/26932556`, 16/11/2026: ruleset `principal-protegida` ativo, com PR obrigatório, sem force push nem exclusão e check `web` exigido. Falta: o site no ar sai da pasta `docs/` (`gh api .../pages`, 16/11/2026: fonte `main:/docs`), sem passar pelo CI | #2 (responsável) |
+| 11 | Testes dos fluxos críticos | Atende | No job `web` do CI, [run 43823325623](https://github.com/douglasabnovato/restaurante-churrascaria/actions/runs/43823325623) do PR #33, 16/11/2026, sem `skip`: `npm test` (Vitest, 16 testes: pedido, horários e medição), `npm run test:rules` (5 testes das regras no emulador) e `npm run test:e2e` (10 execuções: 5 testes × 2 projetos), todos aprovados. Local, 16/11/2026: Vitest 16 de 16 e Playwright 10 de 10 | — |
+| 12 | Documentação honesta | Atende | README diz que o site no ar é o build antigo e aponta o `documentacao/DEPLOY.md` com o estado de 16/11/2026 | — |
 
 **Atendidos:** 1, 2, 4, 6, 8, 11 e 12. **Parciais:** 3, 5, 7, 9 e 10.
 
@@ -46,15 +48,23 @@ Tudo o que o código resolve está feito. Neste ciclo entrou a medição sem coo
 | 5 | Observação do pedido no painel | Issue #13 (precisa das regras publicadas pelo responsável) |
 | 6 | Feriados e fechamento manual do delivery | Issue #18 |
 | 7 | Envio do pedido só com teclado | Feito no ciclo de 09/11/2026 (#19) |
+| 8 | Avaliar o Firebase 13 pelos alertas restantes | Issue #27 |
 | 9 | Primeira imagem do carrossel pelo próprio site | Issue #23 |
-| 8 | Avaliar o Firebase 13 pelos alertas restantes | Próximo ciclo (#27) |
 | 10 | Medição sem cookie (GoatCounter) e Analytics do Firebase desligado | Feito em 10/11/2026 |
+| 11 | Aviso de coleta no rodapé; axe no cardápio inteiro, no celular e no desktop | Feito em 16/11/2026 |
+| 12 | Ligar os alertas do Dependabot | Com o responsável (#29) |
+| 13 | Decidir se o cliente é real ou ilustrativo | Com o responsável (#30) |
+| 14 | Painel da equipe testado no navegador | Issue #31 |
 
 ## 3. Fora do MVP
 
-Pagamento online, integração com caixa e novos recursos antes de resolver a exposição. A lista é uma proposta e pode mudar com a decisão do responsável.
+Pagamento online, integração com caixa e novos recursos antes de publicar a versão atual. A lista é uma proposta e pode mudar com a decisão do responsável.
 
 ## Histórico
+
+### Estado de 10/11/2026 (ciclo da faixa de 90%)
+
+**Resumo:** 7 de 12 aplicáveis atendidos (1, 2, 4, 6, 8, 11 e 12). **Finalizado:** sim. Diferenças para a tabela atual: o critério 8 citava "claro e escuro", mas o app não tem tema escuro, e o projeto escuro repetia o claro; o 9 não citava o Dependabot desligado; o 10 citava o ruleset sem o check `web`.
 
 ### Estado de 10/11/2026, antes do ciclo da faixa de 90%
 

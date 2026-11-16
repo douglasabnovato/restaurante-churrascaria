@@ -69,6 +69,21 @@ As rotas são por hash (`#/painel`), então o GitHub Pages não precisa de `404.
 
 Branch principal: **`main`**.
 
+### Estado em 16/11/2026: o que já foi feito e o que falta
+
+Conferido em 16/11/2026 com `gh api repos/douglasabnovato/restaurante-churrascaria/pages` (fonte `main:/docs`, tipo `legacy`), `gh api .../actions/variables` (nenhuma Variable) e `curl` no site (HTTP 200, `<title>sabor-e-churrasco</title>`, o build antigo).
+
+| Etapa | Situação |
+|---|---|
+| 0 · Regras do Firestore | Feita em 01/11/2026 (#2) |
+| 1 · Validar localmente | O CI faz em todo PR (job `web`: Vitest, regras no emulador, Playwright e build) |
+| 2 · Variables | **Falta** (responsável, #2) |
+| 3 · Subir para o GitHub | Feita: `.env` fora do Git e workflow em `.github/workflows/ci.yml`. A pasta `docs/` fica até a etapa 4, porque o site no ar sai dela |
+| 4 · Fonte do Pages e `PAGES_VIA_ACTIONS` | **Falta** (responsável, #2) |
+| 5 e 6 · Conferir e fechar | Depois da etapa 4 |
+
+O deploy do CI só roda com a Variable `PAGES_VIA_ACTIONS` igual a `true`. Sem ela, a `main` fica verde e o Pages continua servindo `docs/`.
+
 ### Etapa 0 · Segurança (fazer hoje, antes do push)
 
 1. Console do Firebase → **Authentication → Método de login → E-mail/senha**: ativar. Em **Usuários**, criar o usuário da equipe e copiar o **UID**.
@@ -88,7 +103,7 @@ Branch principal: **`main`**.
 
 1. `cd /c/ambiente-projeto/ser-mvp/restaurante-churrascaria`
 2. Conferir que o `.env` tem as variáveis do `.env.example` (incluindo `VITE_WHATSAPP_NUMBER`).
-3. `npm test` (esperado: 4 testes) e `npm run test:rules` (precisa de Java 11+)
+3. `npm test` (esperado: 16 testes em 16/11/2026) e `npm run test:rules` (precisa de Java 21, a versão do CI)
 4. `npm run build` (gera `dist/`) e `npm run preview`: abrir `http://localhost:4173/restaurante-churrascaria/`, montar um pedido e ir a `#/painel`, que pede login.
 
 ### Etapa 2 · Cadastrar as Variables no GitHub
@@ -116,7 +131,9 @@ Branch principal: **`main`**.
 ### Etapa 4 · Configurar o GitHub Pages
 
 1. **Settings → Pages → Build and deployment → Source: GitHub Actions** (antes era "Deploy from a branch", pasta `/docs`).
-2. Aba **Actions**: se o workflow do push já tiver terminado, **Re-run all jobs**. Os jobs `web` e `deploy` precisam ficar verdes.
+2. **Settings → Secrets and variables → Actions → aba Variables → New repository variable**: nome `PAGES_VIA_ACTIONS`, valor `true`.
+3. Aba **Actions → CI → Run workflow** na `main`. Os jobs `web` e `deploy` precisam ficar verdes.
+4. Depois de conferir o site (etapa 5), apagar a pasta `docs/` num PR (`git rm -r docs`): ela deixa de ser publicada.
 
 ### Etapa 5 · Conferir no ar
 
