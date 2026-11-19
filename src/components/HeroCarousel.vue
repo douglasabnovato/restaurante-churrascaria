@@ -16,7 +16,8 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const slides = [
-  { image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=480&q=60", caption: "Carnes nobres preparadas diariamente na brasa" },
+  /* A 1ª imagem é o elemento do LCP: vem do próprio site (public/carrossel-1.webp, foto do Unsplash, licença no README), com preload no index.html (#23) */
+  { image: `${import.meta.env.BASE_URL}carrossel-1.webp`, caption: "Carnes nobres preparadas diariamente na brasa" },
   { image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=480&q=60", caption: "Buffet de saladas e pratos quentes variados" },
   { image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=480&q=60", caption: "Self-service com churrasco e sem balança" },
 ]

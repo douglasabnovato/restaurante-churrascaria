@@ -37,6 +37,7 @@ export interface FirestoreOrder {
   type: OrderType
   table_number?: string | null
   address?: string | null
+  note?: string | null            // Observação do cliente, até 140 caracteres (#13)
   subtotal: number
   status: OrderStatus
   created_at: any                 // Timestamp do Firebase

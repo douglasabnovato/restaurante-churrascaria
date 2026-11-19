@@ -33,6 +33,14 @@ describe('pedidos', () => {
     await assertFails(setDoc(doc(db, 'orders/x2'), order({ admin: true })))
     await assertFails(setDoc(doc(db, 'orders/x3'), order({ address: 'curto' })))
   })
+  it('observação: aceita texto de até 140 caracteres e recusa texto longo ou de outro tipo (#13)', async () => {
+    const db = env.unauthenticatedContext().firestore()
+    await assertSucceeds(setDoc(doc(db, 'orders/n1'), order({ note: 'Picanha ao ponto, sem cebola' })))
+    await assertSucceeds(setDoc(doc(db, 'orders/n2'), order({ note: 'a'.repeat(140) })))
+    await assertFails(setDoc(doc(db, 'orders/n3'), order({ note: 'a'.repeat(141) })))
+    await assertFails(setDoc(doc(db, 'orders/n4'), order({ note: 42 })))
+    await assertFails(setDoc(doc(db, 'orders/n5'), order({ note: null })))
+  })
   it('usuário logado que não é da equipe não lê nem altera', async () => {
     const db = env.authenticatedContext('cliente').firestore()
     await assertFails(getDoc(doc(db, 'orders/o1')))

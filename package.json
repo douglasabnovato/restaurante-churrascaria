@@ -10,6 +10,7 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:rules": "npx firebase-tools emulators:exec --only firestore \"vitest run --config vitest.rules.config.ts\"",
+    "test:e2e:painel": "npx firebase-tools emulators:exec --only auth,firestore --project demo-sabor \"playwright test -c playwright.painel.config.ts\"",
     "deploy:rules": "npx firebase-tools deploy --only firestore:rules"
   },
   "dependencies": {

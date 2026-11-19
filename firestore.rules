@@ -10,7 +10,9 @@ service cloud.firestore {
 
     match /orders/{orderId} {
       allow read, delete: if isStaff();
-      allow create: if request.resource.data.keys().hasOnly(['order_code', 'type', 'table_number', 'address', 'subtotal', 'items', 'status', 'created_at'])
+      // note: observação opcional do cliente (ex.: ponto da carne), texto de até 140 caracteres (#13)
+      allow create: if request.resource.data.keys().hasOnly(['order_code', 'type', 'table_number', 'address', 'subtotal', 'items', 'status', 'created_at', 'note'])
+        && (!('note' in request.resource.data) || (request.resource.data.note is string && request.resource.data.note.size() <= 140))
         && request.resource.data.status == 'pending'
         && request.resource.data.type in ['mesa', 'delivery']
         && request.resource.data.subtotal is number
