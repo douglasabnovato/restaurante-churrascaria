@@ -269,6 +269,10 @@ sabor-e-churrasco/
 └── vite.config.ts
 ```
 
+## 🖼️ Imagens
+
+As fotos do carrossel e do cardápio são do [Unsplash](https://unsplash.com), sob a [Licença Unsplash](https://unsplash.com/license) (uso livre, sem atribuição obrigatória). A primeira foto do carrossel (`photo-1555939594-58d7cb561ad1`) fica no próprio site, em `public/carrossel-1.webp` (WebP 480 × 200, 42 KB), com pré-carregamento no `index.html`, porque é o elemento do LCP (#23). As demais vêm do Unsplash.
+
 ## 🏢 Informações do Estabelecimento
 
 * **Endereço:** Rua Benjamin Guimarães, 315 / 308 - Bairro Democrata, Juiz de Fora - MG (Em frente ao Bahamas Mix)
