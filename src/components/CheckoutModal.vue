@@ -36,7 +36,7 @@
           <label for="order-note" class="block text-xs font-bold text-dark mb-1.5">Observação (opcional)</label>
           <textarea id="order-note" v-model="note" rows="2" :maxlength="NOTE_MAX" placeholder="Ex.: picanha ao ponto, sem cebola"
             aria-describedby="order-note-help" class="w-full p-3 border border-slate-400 rounded-lg text-sm bg-body"></textarea>
-          <p id="order-note-help" class="text-[0.7rem] text-slate-600 mt-1">Vai na mensagem do WhatsApp. Até {{ NOTE_MAX }} caracteres.</p>
+          <p id="order-note-help" class="text-[0.7rem] text-slate-600 mt-1">Vai na mensagem do WhatsApp e no painel da equipe. Até {{ NOTE_MAX }} caracteres.</p>
         </div>
 
         <p id="checkout-error" role="alert" class="text-sm text-red-700 min-h-[1.25rem]">{{ error }}</p>

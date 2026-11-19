@@ -24,6 +24,8 @@ jobs:
       # Pedido só com teclado e axe no checkout, com build sem Firebase (#19)
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
+      # Painel da equipe com os emuladores de Auth e Firestore: login, pedido em tempo real, observação e status (#31)
+      - run: npm run test:e2e:painel
       - run: npm run build
         env:
           VITE_FIREBASE_API_KEY: ${{ vars.VITE_FIREBASE_API_KEY }}
