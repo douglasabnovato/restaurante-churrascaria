@@ -37,7 +37,7 @@ export function useCart() {
       } catch (err) {
         console.warn("Contador de pedidos indisponível; usando código provisório.", err)
       }
-      await orders.saveOrder({ code: orderCode, type, table: String(tableNum), address, subtotal: subtotal.value, items: cart.value })
+      await orders.saveOrder({ code: orderCode, type, table: String(tableNum), address, subtotal: subtotal.value, items: cart.value, note })
     } catch (err) {
       console.warn("Pedido não registrado no painel; seguirá só pelo WhatsApp.", err)
     }

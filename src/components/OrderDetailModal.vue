@@ -47,6 +47,10 @@ const emit = defineEmits<{
             <span class="block text-xs text-slate-500 font-medium">Endereço de Entrega</span>
             <span class="font-medium text-slate-700">{{ order.address }}</span>
           </div>
+          <div v-if="order.note" class="col-span-2 pt-2 border-t border-slate-200">
+            <span class="block text-xs text-slate-500 font-medium">Observação do cliente</span>
+            <span class="font-medium text-slate-700 break-words" data-testid="order-note">{{ order.note }}</span>
+          </div>
         </div>
 
         <!-- Status do Pedido & Ações Rápidas -->

@@ -68,6 +68,7 @@ export function useOrders() {
           type: data.type,
           table_number: data.table_number,
           address: data.address,
+          note: typeof data.note === 'string' ? data.note : null,
           subtotal: data.subtotal || 0,
           status: data.status || 'pending',
           created_at: data.created_at,
