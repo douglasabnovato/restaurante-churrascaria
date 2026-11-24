@@ -14,6 +14,13 @@ Neste ciclo (18/11): a 1ª imagem do carrossel, elemento do LCP, passou a vir do
 
 Ciclo de 16/11: o teste "escuro" saiu (o app não tem tema escuro próprio) e deu lugar ao projeto desktop; o axe passou a cobrir o cardápio inteiro; o rodapé ganhou o aviso de coleta da medição (#12).
 
+## Produto
+
+- **Problema:** clientes precisam pedir pelo celular, e a equipe precisa acompanhar os pedidos sem erro de cálculo manual.
+- **Público:** clientes do restaurante, que pedem pelo celular, e a equipe, que acompanha o painel. Se o cliente é real ou ilustrativo: a decidir (responsável, #30).
+- **Hipótese:** acreditamos que o cardápio digital fará metade dos pedidos do delivery passar por ele em um mês, com menos pedidos corrigidos pela equipe. Saberemos quando o GoatCounter mostrar, no mês, eventos `enviar-pedido` em pelo menos metade do total de pedidos do delivery que a equipe registra.
+- **Métrica:** eventos `enviar-pedido` no mês ÷ pedidos do delivery registrados pela equipe, medido por GoatCounter (falta a conta, #12) — meta: pelo menos 50% em um mês, decidida pelo coordenador em 10/11/2026 (D1), revisável pelo responsável (#16). Meta de pedidos corrigidos: a decidir (responsável).
+
 ## Problema e hipótese
 
 **Problema e público:** Clientes do restaurante pedem pelo celular, e a equipe acompanha os pedidos em um painel, sem erro de cálculo manual.
@@ -63,6 +70,8 @@ Ciclo de 16/11: o teste "escuro" saiu (o app não tem tema escuro próprio) e de
 Pagamento online, integração com caixa e novos recursos antes de publicar a versão atual. A lista é uma proposta e pode mudar com a decisão do responsável.
 
 ## Histórico
+
+- 20/11/2026: bloco Produto padronizado, sem mudar critérios.
 
 ### Revisão de 19/11/2026 (secret scanning)
 
